@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔥 Profile</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/profile.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <main class="container">
+    <section class="profile-card" id="profile-info">
+      <img src="/assets/images/mobintix.png" alt="User Avatar" class="avatar">
+      <h2 id="profile-name">User Name</h2>
+      <p id="profile-bio">User bio goes here...</p>
+      <button id="edit-profile">Edit Profile</button>
+    </section>
+
+    <section>
+      <h2>User Posts</h2>
+      <div id="user-posts" class="feed-grid"></div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script type="module" src="./js/navbar.js"></script>
+  <script type="module" src="./js/footer.js"></script>
+  <script type="module" src="./js/profile.js"></script>
+</body>
+</html>

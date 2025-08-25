@@ -1,0 +1,366 @@
+[
+  {
+    "id": 1,
+    "title": "Welcome to the Blog Platform",
+    "excerpt": "This is your first demo post. More coming soon!",
+    "author": "Admin",
+    "date": "2025-08-24"
+  },
+  {
+    "id": 2,
+    "title": "Second Blog Post",
+    "excerpt": "This is another test post with sample content.",
+    "author": "Aryan",
+    "date": "2025-08-20"
+  },
+  {
+    "id": 3,
+    "title": "Mastering JavaScript in 2025",
+    "excerpt": "Explore the new ES2025 features and how they are changing front-end development.",
+    "author": "Neha Sharma",
+    "date": "2025-08-18"
+  },
+  {
+    "id": 4,
+    "title": "The Future of Firebase",
+    "excerpt": "A look at Firebase’s role in serverless applications and real-time data management.",
+    "author": "Ravi Kumar",
+    "date": "2025-08-15"
+  },
+  {
+    "id": 5,
+    "title": "Why Blogging Still Matters",
+    "excerpt": "With AI and social media rising, blogs continue to hold unique power in digital storytelling.",
+    "author": "Sophia Lee",
+    "date": "2025-08-12"
+  },
+  {
+    "id": 6,
+    "title": "UI/UX Design Trends for 2025",
+    "excerpt": "Minimalism, glassmorphism, and AI-assisted design tools are defining the future.",
+    "author": "David Park",
+    "date": "2025-08-10"
+  },
+  {
+    "id": 7,
+    "title": "Top 10 Productivity Tools for Developers",
+    "excerpt": "From project management to AI pair programming, here are the must-have tools.",
+    "author": "Anjali Mehta",
+    "date": "2025-08-08"
+  },
+  {
+    "id": 8,
+    "title": "Building Scalable Web Apps with React",
+    "excerpt": "React and serverless backends are the key to modern scalable applications.",
+    "author": "Michael Chen",
+    "date": "2025-08-06"
+  },
+  {
+    "id": 9,
+    "title": "The Rise of Serverless Computing",
+    "excerpt": "Why developers are moving from traditional servers to serverless platforms.",
+    "author": "Priya Singh",
+    "date": "2025-08-04"
+  },
+  {
+    "id": 10,
+    "title": "How to Grow Your Blog in 2025",
+    "excerpt": "SEO, AI tools, and community engagement strategies for modern bloggers.",
+    "author": "Lucas Brown",
+    "date": "2025-08-01"
+  },
+  {
+    "id": 11,
+    "title": "Cybersecurity Best Practices",
+    "excerpt": "How to protect your online accounts, blogs, and digital platforms in 2025.",
+    "author": "Nisha Patel",
+    "date": "2025-07-28"
+  },
+  {
+    "id": 12,
+    "title": "AI in Content Creation",
+    "excerpt": "How AI tools like GPT are revolutionizing writing, design, and media production.",
+    "author": "Jason Miller",
+    "date": "2025-07-25"
+  },
+  {
+    "id": 13,
+    "title": "Why Responsive Design is Non-Negotiable",
+    "excerpt": "More than 70% of internet users are mobile-first—here’s why your site must adapt.",
+    "author": "Emma Watson",
+    "date": "2025-07-23"
+  },
+  {
+    "id": 14,
+    "title": "Cloud Storage Wars",
+    "excerpt": "Google Drive, OneDrive, Dropbox, and Firebase Storage compared in 2025.",
+    "author": "Rahul Verma",
+    "date": "2025-07-21"
+  },
+  {
+    "id": 15,
+    "title": "Dark Mode Design Principles",
+    "excerpt": "How to create visually appealing, eye-friendly dark mode UIs.",
+    "author": "Hannah Wilson",
+    "date": "2025-07-19"
+  },
+  {
+    "id": 16,
+    "title": "The Evolution of Blogging Platforms",
+    "excerpt": "From WordPress to AI-driven platforms, a timeline of blogging innovation.",
+    "author": "Olivia Martin",
+    "date": "2025-07-16"
+  },
+  {
+    "id": 17,
+    "title": "Web3 and Blogging",
+    "excerpt": "Can decentralized platforms change the future of publishing?",
+    "author": "Ethan Carter",
+    "date": "2025-07-14"
+  },
+  {
+    "id": 18,
+    "title": "Optimizing Website Performance",
+    "excerpt": "Lazy loading, caching, and CDN strategies for faster websites.",
+    "author": "Sanya Gupta",
+    "date": "2025-07-11"
+  },
+  {
+    "id": 19,
+    "title": "The Power of Micro-Communities",
+    "excerpt": "Why small online communities are more engaged than massive platforms.",
+    "author": "Daniel Evans",
+    "date": "2025-07-08"
+  },
+  {
+    "id": 20,
+    "title": "Starting Your First Blog",
+    "excerpt": "A beginner’s guide to launching and growing a blog in 2025.",
+    "author": "Maya Kapoor",
+    "date": "2025-07-06"
+  },
+  {
+    "id": 21,
+    "title": "AI-Powered SEO Tools",
+    "excerpt": "From keyword suggestions to automated optimization, AI is changing SEO.",
+    "author": "Alex Green",
+    "date": "2025-07-04"
+  },
+  {
+    "id": 22,
+    "title": "Building Your Personal Brand",
+    "excerpt": "Blogging as a tool to establish authority in your industry.",
+    "author": "Chloe White",
+    "date": "2025-07-01"
+  },
+  {
+    "id": 23,
+    "title": "Exploring Static Site Generators",
+    "excerpt": "Next.js, Hugo, and Gatsby are powering the modern web.",
+    "author": "Arjun Iyer",
+    "date": "2025-06-29"
+  },
+  {
+    "id": 24,
+    "title": "How to Monetize Your Blog",
+    "excerpt": "Ads, sponsorships, and digital products explained.",
+    "author": "Sophia Taylor",
+    "date": "2025-06-27"
+  },
+  {
+    "id": 25,
+    "title": "Writing Engaging Headlines",
+    "excerpt": "Catchy titles that boost clicks without being clickbait.",
+    "author": "Liam Scott",
+    "date": "2025-06-25"
+  },
+  {
+    "id": 26,
+    "title": "Mastering CSS Grid & Flexbox",
+    "excerpt": "The ultimate layout systems for modern responsive design.",
+    "author": "Jia Li",
+    "date": "2025-06-22"
+  },
+  {
+    "id": 27,
+    "title": "The Psychology of Color in Design",
+    "excerpt": "How colors influence mood, trust, and conversions.",
+    "author": "Elena Petrova",
+    "date": "2025-06-20"
+  },
+  {
+    "id": 28,
+    "title": "Content Planning for Bloggers",
+    "excerpt": "Stay consistent with editorial calendars and content batching.",
+    "author": "Rohan Mehta",
+    "date": "2025-06-18"
+  },
+  {
+    "id": 29,
+    "title": "The Importance of Accessibility",
+    "excerpt": "Why inclusive design matters for blogs and websites.",
+    "author": "Isabella Rossi",
+    "date": "2025-06-16"
+  },
+  {
+    "id": 30,
+    "title": "Video Blogging vs Written Blogging",
+    "excerpt": "Should you write, vlog, or do both?",
+    "author": "Omar Ali",
+    "date": "2025-06-14"
+  },
+  {
+    "id": 31,
+    "title": "How to Build an Email List",
+    "excerpt": "Email is still one of the most powerful marketing tools.",
+    "author": "Grace Hall",
+    "date": "2025-06-12"
+  },
+  {
+    "id": 32,
+    "title": "Top 5 Chrome Extensions for Writers",
+    "excerpt": "Grammarly, Notion Web Clipper, and other useful tools.",
+    "author": "Karan Joshi",
+    "date": "2025-06-10"
+  },
+  {
+    "id": 33,
+    "title": "Boosting Blog Engagement",
+    "excerpt": "Comments, polls, and interactive content ideas.",
+    "author": "Lily Carter",
+    "date": "2025-06-08"
+  },
+  {
+    "id": 34,
+    "title": "Understanding Analytics",
+    "excerpt": "How to measure blog success with Google Analytics and Firebase.",
+    "author": "Benjamin Moore",
+    "date": "2025-06-06"
+  },
+  {
+    "id": 35,
+    "title": "The Role of AI in Web Development",
+    "excerpt": "AI is not replacing developers, it’s assisting them.",
+    "author": "Tina Desai",
+    "date": "2025-06-04"
+  },
+  {
+    "id": 36,
+    "title": "Content Repurposing Strategies",
+    "excerpt": "Turn one blog post into videos, infographics, and newsletters.",
+    "author": "Diego Martinez",
+    "date": "2025-06-02"
+  },
+  {
+    "id": 37,
+    "title": "Why Minimalism Works",
+    "excerpt": "Clean design isn’t boring—it’s powerful and effective.",
+    "author": "Sara Khan",
+    "date": "2025-05-31"
+  },
+  {
+    "id": 38,
+    "title": "The Future of Work",
+    "excerpt": "Remote-first, AI-assisted, and gig-driven economies.",
+    "author": "James Turner",
+    "date": "2025-05-29"
+  },
+  {
+    "id": 39,
+    "title": "Best Practices for Comment Sections",
+    "excerpt": "Moderation, engagement, and community building tips.",
+    "author": "Harshita Nair",
+    "date": "2025-05-27"
+  },
+  {
+    "id": 40,
+    "title": "How to Stay Consistent as a Blogger",
+    "excerpt": "Tips for avoiding burnout and writer’s block.",
+    "author": "Daniel Kim",
+    "date": "2025-05-25"
+  },
+  {
+    "id": 41,
+    "title": "Content Marketing for 2025",
+    "excerpt": "Where content fits in the digital marketing funnel.",
+    "author": "Amelia Brooks",
+    "date": "2025-05-23"
+  },
+  {
+    "id": 42,
+    "title": "Why Open Source Matters",
+    "excerpt": "The role of open-source tools in modern development.",
+    "author": "Aditya Sharma",
+    "date": "2025-05-21"
+  },
+  {
+    "id": 43,
+    "title": "Podcasting for Beginners",
+    "excerpt": "How to start your own podcast alongside your blog.",
+    "author": "Clara Diaz",
+    "date": "2025-05-19"
+  },
+  {
+    "id": 44,
+    "title": "Ethical AI in Blogging",
+    "excerpt": "Transparency and authenticity in AI-generated content.",
+    "author": "Joshua Lee",
+    "date": "2025-05-17"
+  },
+  {
+    "id": 45,
+    "title": "Why Storytelling Wins",
+    "excerpt": "Stories connect deeper than facts—here’s why they matter.",
+    "author": "Freya Kapoor",
+    "date": "2025-05-15"
+  },
+  {
+    "id": 46,
+    "title": "Scaling a Blog to 1M Views",
+    "excerpt": "Realistic strategies bloggers use to grow big.",
+    "author": "Nathan Clark",
+    "date": "2025-05-13"
+  },
+  {
+    "id": 47,
+    "title": "How Gen Z Consumes Content",
+    "excerpt": "Short-form video, memes, and interactive experiences.",
+    "author": "Aria Singh",
+    "date": "2025-05-11"
+  },
+  {
+    "id": 48,
+    "title": "The Rise of Niche Blogs",
+    "excerpt": "Smaller focused blogs often perform better than generalist ones.",
+    "author": "Chris Morgan",
+    "date": "2025-05-09"
+  },
+  {
+    "id": 49,
+    "title": "Balancing Quality and Quantity",
+    "excerpt": "How often should you post to maximize impact?",
+    "author": "Zara Patel",
+    "date": "2025-05-07"
+  },
+  {
+    "id": 50,
+    "title": "Building Blogging Communities",
+    "excerpt": "Forums, Discord servers, and comment sections done right.",
+    "author": "Leo Anderson",
+    "date": "2025-05-05"
+  },
+  {
+    "id": 51,
+    "title": "From Blogger to Author",
+    "excerpt": "How consistent blogging can help you publish a book.",
+    "author": "Meera Nair",
+    "date": "2025-05-03"
+  },
+  {
+    "id": 52,
+    "title": "The Future of Online Learning",
+    "excerpt": "Blogs as a backbone of knowledge-sharing communities.",
+    "author": "Ryan Collins",
+    "date": "2025-05-01"
+  }
+]

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔥 Authentication</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/auth.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body class="auth-page">
+  <div id="navbar-placeholder"></div>
+
+  <main class="auth-container">
+    <!-- Left Section -->
+    <section class="auth-illustration">
+      <img src="/assets/images/mobintix.png" alt="Auth Illustration">
+      <h2>Welcome to <span class="brand">BlogPlatform</span> ✨</h2>
+      <p>Login or create an account to share your stories with the world.</p>
+    </section>
+
+    <!-- Right Section -->
+    <section class="auth-form-card">
+      <!-- Toggle Buttons -->
+      <div class="auth-toggle">
+        <button id="login-tab" class="active">Login</button>
+        <button id="signup-tab">Signup</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form">
+        <h2>Login</h2>
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-pass" placeholder="Password" required>
+        <button type="button" id="login-btn">Login</button>
+        <p class="auth-links">
+          <a href="#">Forgot password?</a>
+        </p>
+      </form>
+
+      <!-- Signup Form (Hidden by Default) -->
+      <form id="signup-form" class="auth-form hidden">
+        <h2>Create Account</h2>
+        <input type="text" id="signup-name" placeholder="Full Name" required>
+        <input type="email" id="signup-email" placeholder="Email" required>
+        <input type="password" id="signup-pass" placeholder="Password" required>
+        <button type="button" id="signup-btn">Signup</button>
+      </form>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script type="module" src="./js/navbar.js"></script>
+  <script type="module" src="./js/footer.js"></script>
+  <script type="module">
+    import { login, signup } from "./js/firebase/auth.js";
+
+    // Toggle Forms
+    const loginTab = document.getElementById("login-tab");
+    const signupTab = document.getElementById("signup-tab");
+    const loginForm = document.getElementById("login-form");
+    const signupForm = document.getElementById("signup-form");
+
+    loginTab.onclick = () => {
+      loginTab.classList.add("active");
+      signupTab.classList.remove("active");
+      loginForm.classList.remove("hidden");
+      signupForm.classList.add("hidden");
+    };
+
+    signupTab.onclick = () => {
+      signupTab.classList.add("active");
+      loginTab.classList.remove("active");
+      signupForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+    };
+
+    // Login Handler
+    document.getElementById("login-btn").onclick = () => {
+      login(
+        document.getElementById("login-email").value,
+        document.getElementById("login-pass").value
+      );
+    };
+
+    // Signup Handler
+    document.getElementById("signup-btn").onclick = () => {
+      signup(
+        document.getElementById("signup-email").value,
+        document.getElementById("signup-pass").value
+      );
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+/* Mobile first adjustments */
+@media (max-width: 768px) {
+  .feed-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-card {
+    padding: 1rem;
+  }
+}

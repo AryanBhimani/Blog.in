@@ -1,9 +1,90 @@
-/* Footer Styles */
 .footer {
-  background: #111;
-  color: #ddd;
+  background: #1a1a1a;
+  color: #f1f1f1;
+  padding: 40px 20px 20px;
+  margin-top: 50px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto 30px auto;
+}
+
+.footer-brand {
+  text-align: left;
+}
+
+.footer-brand img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 2px solid #ff5722;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.footer-brand h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #ff5722;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.footer-links h3,
+.footer-social h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links ul li {
+  margin: 8px 0;
+}
+
+.footer-links ul li a {
+  text-decoration: none;
+  color: #aaa;
+  transition: color 0.3s;
+}
+
+.footer-links ul li a:hover {
+  color: #ff5722;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icons a img {
+  height: 22px;
+  width: 22px;
+  filter: invert(1); /* makes icons white */
+  transition: transform 0.3s, filter 0.3s;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.2);
+  filter: invert(54%) sepia(89%) saturate(5632%) hue-rotate(351deg) brightness(95%) contrast(97%);
+}
+
+.footer-bottom {
+  border-top: 1px solid #333;
+  padding-top: 15px;
   text-align: center;
-  padding: 20px;
-  margin-top: 30px;
-  font-size: 0.9rem;
+  font-size: 14px;
+  color: #aaa;
 }

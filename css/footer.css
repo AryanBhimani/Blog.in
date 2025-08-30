@@ -1,90 +1,86 @@
 .footer {
-  background: #1a1a1a;
-  color: #f1f1f1;
-  padding: 40px 20px 20px;
-  margin-top: 50px;
+  background: #ffffff;
+  border-top: 1px solid #eee;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.footer-top {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto 30px auto;
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.footer-brand {
-  text-align: left;
+.footer-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-.footer-brand img {
+.footer-logo img {
   height: 50px;
   width: 50px;
   border-radius: 50%;
   border: 2px solid #ff5722;
   object-fit: cover;
-  margin-bottom: 10px;
 }
 
-.footer-brand h2 {
-  margin: 0;
+.footer-logo h2 {
   font-size: 22px;
   color: #ff5722;
-}
-
-.footer-brand p {
-  font-size: 14px;
-  color: #aaa;
-}
-
-.footer-links h3,
-.footer-social h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #fff;
-}
-
-.footer-links ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
 }
 
-.footer-links ul li {
-  margin: 8px 0;
+.footer-tagline {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
 }
 
-.footer-links ul li a {
+.footer-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-menu li a {
   text-decoration: none;
-  color: #aaa;
+  color: #444;
+  font-weight: 500;
   transition: color 0.3s;
 }
 
-.footer-links ul li a:hover {
+.footer-menu li a:hover {
   color: #ff5722;
 }
 
-.social-icons {
+.footer-social {
   display: flex;
+  justify-content: center;
   gap: 15px;
+  margin-bottom: 20px;
 }
 
-.social-icons a img {
+.footer-social a img {
   height: 22px;
   width: 22px;
-  filter: invert(1); /* makes icons white */
+  filter: grayscale(100%) brightness(0.4);
   transition: transform 0.3s, filter 0.3s;
 }
 
-.social-icons a:hover img {
+.footer-social a:hover img {
   transform: scale(1.2);
-  filter: invert(54%) sepia(89%) saturate(5632%) hue-rotate(351deg) brightness(95%) contrast(97%);
+  filter: none;
 }
 
-.footer-bottom {
-  border-top: 1px solid #333;
-  padding-top: 15px;
-  text-align: center;
-  font-size: 14px;
-  color: #aaa;
+.footer-copy {
+  font-size: 13px;
+  color: #777;
+  margin-top: 10px;
 }

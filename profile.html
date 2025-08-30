@@ -12,17 +12,41 @@
 <body>
   <div id="navbar-placeholder"></div>
 
-  <main class="container">
-    <section class="profile-card" id="profile-info">
-      <img src="./assets/images/blog.in.png" alt="User Avatar" class="avatar">
-      <h2 id="profile-name">User Name</h2>
-      <p id="profile-bio">User bio goes here...</p>
-      <button id="edit-profile" onclick="window.location.href='auth.html'">Edit Profile</button>
+  <main class="container profile-page">
+    <!-- Profile Header -->
+    <section class="profile-header" id="profile-info">
+      <div class="profile-avatar">
+        <img src="./assets/images/blog.in.png" alt="User Avatar" class="avatar">
+      </div>
+      <div class="profile-details">
+        <h2 id="profile-name">User Name</h2>
+        <p id="profile-bio">A short bio goes here. Passionate about blogging, coding, and sharing ideas 🚀</p>
+        <button id="edit-profile" onclick="window.location.href='auth.html'">Edit Profile</button>
+      </div>
     </section>
 
-    <section>
+    <!-- Profile Stats -->
+    <section class="profile-stats">
+      <div>
+        <h3>12</h3>
+        <p>Posts</p>
+      </div>
+      <div>
+        <h3>256</h3>
+        <p>Followers</p>
+      </div>
+      <div>
+        <h3>180</h3>
+        <p>Following</p>
+      </div>
+    </section>
+
+    <!-- User Posts -->
+    <section class="profile-posts">
       <h2>User Posts</h2>
-      <div id="user-posts" class="feed-grid"></div>
+      <div id="user-posts" class="feed-grid">
+        <!-- Posts will be injected here -->
+      </div>
     </section>
   </main>
 

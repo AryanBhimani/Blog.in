@@ -1,3 +1,1 @@
-# Blog Platform with Firebase
-
-## This project uses Firebase for Auth, Firestore, and Storage.
+# Blog.IN Platform

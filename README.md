@@ -1,1 +1,1 @@
-# Blog.IN Platform
+# Blog.IN

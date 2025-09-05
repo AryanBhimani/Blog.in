@@ -1,18 +1,49 @@
 // Auth functions (signup, login, logout)
-import { auth } from "./firebase-config.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } 
+import { auth, db } from "./firebase-config.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } 
 from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  setDoc 
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// Signup
+
 export async function signup(email, password) {
-  await createUserWithEmailAndPassword(auth, email, password);
-  alert("Signup successful!");
+  const name = document.getElementById("signup-name").value.trim();
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Save name to Firebase Auth profile
+    await updateProfile(user, { displayName: name });
+
+    // Save user info in Firestore
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      email: email,
+      createdAt: new Date().toISOString()
+    });
+
+    alert("Signup successful ✅");
+    window.location.href = "index.html"; // redirect after signup
+  } catch (error) {
+    alert("Signup failed ❌: " + error.message);
+  }
 }
 
-// Login
+// -------------------- LOGIN --------------------
 export async function login(email, password) {
-  await signInWithEmailAndPassword(auth, email, password);
-  alert("Login successful!");
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    alert(`Welcome back, ${user.displayName || "User"} 🎉`);
+    window.location.href = "index.html"; // redirect after login
+  } catch (error) {
+    alert("Login failed ❌: " + error.message);
+  }
 }
 
 // Logout

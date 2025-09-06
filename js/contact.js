@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Watch auth state
   onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      alert("⚠️ You must be logged in to send a message.", "error");
-      contactForm.style.display = "none"; // hide form if not logged in
-      return;
-    }
+    // if (!user) {
+    //   alert("⚠️ You must be logged in to send a message.", "error");
+    //   contactForm.style.display = "none"; // hide form if not logged in
+    //   return;
+    // }
 
     // Handle form submission when user is logged in
     contactForm.addEventListener("submit", async (e) => {

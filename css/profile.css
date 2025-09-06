@@ -38,18 +38,42 @@
   color: #555;
 }
 
+/* Buttons Shared Base */
 .profile-details button {
-  background: #ff5722;
-  color: #fff;
   padding: 8px 18px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 14px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
 }
 
-.profile-details button:hover {
+/* Edit Profile Button */
+#edit-profile {
+  background: #ff5722;
+  color: #fff;
+}
+#edit-profile:hover {
   background: #e64a19;
+}
+
+/* Blog Button */
+#Blog {
+  background: #2196f3;
+  color: #fff;
+}
+#Blog:hover {
+  background: #1976d2;
+}
+
+/* Login Button */
+#Login {
+  background: #4caf50;
+  color: #fff;
+}
+#Login:hover {
+  background: #388e3c;
 }
 
 /* Profile Stats */
@@ -132,6 +156,7 @@
 
   .profile-details button {
     width: 100%;
+    margin-bottom: 10px;
   }
 
   .profile-stats {

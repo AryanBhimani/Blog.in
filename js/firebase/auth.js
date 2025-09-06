@@ -39,6 +39,9 @@ export async function login(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    // --- NEW: Store a unique token in localStorage on successful login ---
+    localStorage.setItem('authToken', user.uid);
+
     alert(`Welcome back, ${user.displayName || "User"} 🎉`);
     window.location.href = "index.html"; // redirect after login
   } catch (error) {
@@ -48,6 +51,15 @@ export async function login(email, password) {
 
 // Logout
 export async function logout() {
-  await signOut(auth);
-  alert("Logged out!");
+  try {
+    await signOut(auth);
+
+    // --- NEW: Clear the token from localStorage on logout ---
+    localStorage.removeItem('authToken');
+
+    alert("Logged out!");
+    window.location.href = "index.html"; // Redirect to homepage after logout
+  } catch (error) {
+    alert("Logout failed ❌: " + error.message);
+  }
 }

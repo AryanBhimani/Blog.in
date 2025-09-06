@@ -62,11 +62,11 @@
 }
 
 /* Blog Button */
-#Blog {
+#post {
   background: #2196f3;
   color: #fff;
 }
-#Blog:hover {
+#post:hover {
   background: #1976d2;
 }
 

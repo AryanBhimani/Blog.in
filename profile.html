@@ -26,7 +26,7 @@
       <div class="profile-details">
         <h2 id="profile-name">User Name</h2>
         <p id="profile-bio">A short bio goes here. Passionate about blogging, coding, and sharing ideas 🚀</p>
-        <button id="edit-profile" onclick="window.location.href='auth.html'">Edit Profile</button>
+        <button id="edit-profile" onclick="window.location.href='editprofile.html'">Edit Profile</button>
         <button id="post" onclick="window.location.href='post.html'">Blog Post</button>
         <button id="Login" onclick="window.location.href='auth.html'">Login</button>
       </div>
@@ -47,15 +47,10 @@
         <p>Following</p>
       </div>
     </section>
-
-    <!-- User Posts -->
-    <section class="profile-posts">
-      <h2>User Posts</h2>
-      <div id="user-posts" class="feed-grid">
-        <!-- Posts will be injected here -->
-      </div>
+    <section id="user-posts" class="post-list">
+      <h2>📝 My Blogs</h2>
+      <div id="user-posts-list"></div>
     </section>
-    <div id="feed-container" class="feed-grid"></div>
   </main>
 
   <div id="footer-placeholder"></div>

@@ -4,7 +4,7 @@ import {
   collection,
   addDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
@@ -24,8 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       // Get form values
-      const fullName = contactForm.querySelector("input[placeholder='Full Name']").value.trim();
-      const email = contactForm.querySelector("input[placeholder='Email Address']").value.trim();
+      const fullName = contactForm
+        .querySelector("input[placeholder='Full Name']")
+        .value.trim();
+      const email = contactForm
+        .querySelector("input[placeholder='Email Address']")
+        .value.trim();
       const message = contactForm.querySelector("textarea").value.trim();
 
       if (!fullName || !email || !message) {

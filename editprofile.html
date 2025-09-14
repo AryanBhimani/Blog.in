@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="./css/editprofile.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+    <link rel="stylesheet" href="./css/footer.css">
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <h2>Edit Profile</h2>
+
+    <form id="editProfileForm">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" required />
+        </div>
+        <div>
+            <label for="bio">Bio:</label>
+            <textarea id="bio" placeholder="Write something about yourself..."></textarea>
+        </div>
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <p id="message" style="color: green; display:none;">Profile updated successfully!</p>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Load JS file -->
+    <script type="module" src="./js/navbar.js"></script>
+    <script type="module" src="./js/footer.js"></script>
+    <script type="module" src="/js/editprofile.js"></script>
+</body>
+
+</html>

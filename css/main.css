@@ -49,7 +49,9 @@ button:hover {
 }
 
 /* Inputs (Global) */
-input, textarea, select {
+input,
+textarea,
+select {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -58,7 +60,9 @@ input, textarea, select {
   font-size: 1rem;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   border-color: #ff5722;
   box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);

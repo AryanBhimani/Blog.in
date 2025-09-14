@@ -1,49 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🔥 Post</title>
   <link rel="icon" type="image/png" href="./assets/images/blog.in.png">
-  
+
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/post.css">
-  <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link rel="stylesheet" href="./css/footer.css">
 </head>
+
 <body>
   <!-- Navbar -->
   <div id="navbar-placeholder"></div>
 
-  <!-- Post Container -->
   <main class="container">
-    <article id="post-container" class="post-card">
-      <header class="post-header">
-        <h1 class="post-title">Loading Post...</h1>
-        <div class="post-meta">
-          <img src="./assets/images/blog.in.png" alt="Author Avatar" class="author-avatar">
-          <div>
-            <p class="author-name">Author Name</p>
-            <span class="post-date">Date</span>
-          </div>
-        </div>
-      </header>
-      <div class="post-content">
-        <p>Post content will load here...</p>
-      </div>
-    </article>
-
-    <!-- Comments Section -->
-    <section id="comments-section" class="comments-card">
-      <h2>💬 Comments</h2>
-      <div id="comments-list" class="comments-list">
-        <p>No comments yet. Be the first to share your thoughts!</p>
-      </div>
-
-      <div class="comment-form">
-        <textarea id="comment-input" placeholder="Write a comment..."></textarea>
-        <button id="add-comment">Post Comment</button>
-      </div>
+    <!-- Blog Post Form -->
+    <section id="create-post" class="post-card" style="display: none;">
+      <h2>✍️ Write a New Blog</h2>
+      <input type="text" id="post-title" placeholder="Enter post title" required>
+      <textarea id="post-content" placeholder="Write your blog content..." required></textarea>
+      <button id="submit-post">Publish Post</button>
     </section>
   </main>
 
@@ -54,4 +34,5 @@
   <script type="module" src="./js/footer.js"></script>
   <script type="module" src="./js/post.js"></script>
 </body>
+
 </html>

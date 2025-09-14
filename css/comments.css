@@ -1,25 +1,25 @@
-/* Post Card */
-.post-card {
+/* comments Card */
+.comments-card {
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   margin-bottom: 2rem;
 }
 
-.post-header {
+.comments-header {
   border-bottom: 1px solid #eee;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
 }
 
-.post-title {
+.comments-title {
   font-size: 2rem;
   margin: 0 0 0.5rem;
   color: #222;
 }
 
-.post-meta {
+.comments-meta {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -38,13 +38,13 @@
   margin: 0;
 }
 
-.post-date {
+.comments-date {
   font-size: 0.85rem;
   color: #666;
 }
 
-/* Post Content */
-.post-content {
+/* comments Content */
+.comments-content {
   line-height: 1.7;
   font-size: 1.1rem;
   color: #444;
@@ -56,7 +56,7 @@
   background: #fafafa;
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .comments-card h2 {

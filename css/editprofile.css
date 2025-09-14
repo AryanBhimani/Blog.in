@@ -1,0 +1,82 @@
+/* Reset some defaults */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  color: #333;
+}
+
+/* Center container */
+h2 {
+  text-align: center;
+  margin-top: 40px;
+  color: #2c3e50;
+}
+
+/* Form container */
+form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Form fields */
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #555;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #2980b9;
+}
+
+/* Success message */
+#message {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+  color: green;
+  display: none; /* shown dynamically by JS */
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  form {
+    margin: 15px;
+    padding: 20px;
+  }
+}

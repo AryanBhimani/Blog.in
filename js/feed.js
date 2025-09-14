@@ -1,24 +1,3 @@
-// // js/feed.js
-// fetch("./data/posts.json")
-//   .then((res) => res.json())
-//   .then((posts) => {
-//     const container = document.getElementById("feed-container");
-//     container.innerHTML = "";
-
-//     posts.forEach((post) => {
-//       const card = `
-//         <div class="post-card">
-//           <h2><a href="comment.html?id=${post.id}">${post.title}</a></h2>
-//           <p>${post.excerpt}</p>
-//           <small>By ${post.author} • ${post.date}</small>
-//         </div>
-//       `;
-//       container.innerHTML += card;
-//     });
-//   });
-
-
-
 // /js/feed.js
 import { db } from "./firebase/firebase-config.js";
 import { collection, getDocs, query, orderBy } 

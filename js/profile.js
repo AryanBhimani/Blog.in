@@ -1,19 +1,9 @@
 // /js/profile.js
 import { auth, db } from "./firebase/firebase-config.js";
-import {
-  onAuthStateChanged,
-  signOut,
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import {
-  doc,
-  getDoc,
-  collection,
-  query,
-  orderBy,
-  getDocs,
-  deleteDoc,
-  updateDoc,
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { onAuthStateChanged, signOut } 
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { doc, getDoc, collection, query, orderBy, getDocs, deleteDoc, updateDoc } 
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const nameEl = document.getElementById("profile-name");
@@ -27,9 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // ---- Logged In ----
       if (loginBtn) {
         loginBtn.textContent = "Logout";
-        loginBtn.onclick = async () => {
-          await signOut(auth);
-        };
+        loginBtn.onclick = async () => { await signOut(auth); };
       }
 
       try {
@@ -50,9 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (editBtn) {
-        editBtn.onclick = () => {
-          window.location.href = "editprofile.html";
-        };
+        editBtn.onclick = () => { window.location.href = "editprofile.html"; };
       }
 
       // 🔥 Load this user's blog posts
@@ -107,10 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const contentEl = article.querySelector("p");
 
                 const newTitle = prompt("Edit title:", titleEl.textContent);
-                const newContent = prompt(
-                  "Edit content:",
-                  contentEl.textContent
-                );
+                const newContent = prompt("Edit content:", contentEl.textContent);
 
                 if (newTitle && newContent) {
                   await updateDoc(doc(db, "users", user.uid, "posts", postId), {
@@ -129,13 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
           postsList.innerHTML = "<p>Failed to load blogs.</p>";
         }
       }
+
     } else {
       // ---- Logged Out ----
       if (loginBtn) {
         loginBtn.textContent = "Login";
-        loginBtn.onclick = () => {
-          window.location.href = "auth.html";
-        };
+        loginBtn.onclick = () => { window.location.href = "auth.html"; };
       }
       if (editBtn) {
         editBtn.onclick = () => {

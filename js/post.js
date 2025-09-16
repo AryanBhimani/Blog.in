@@ -1,11 +1,8 @@
 // /js/post.js
 import { auth, db } from "./firebase/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp } 
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const createPostSection = document.getElementById("create-post");
 const postBtn = document.getElementById("submit-post");
@@ -30,7 +27,7 @@ onAuthStateChanged(auth, (user) => {
         await addDoc(collection(db, "users", user.uid, "posts"), {
           title,
           content,
-          createdAt: serverTimestamp(),
+          createdAt: serverTimestamp()
         });
 
         alert("✅ Post published successfully!");

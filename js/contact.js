@@ -31,9 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!fullName || !email || !message) {
         alert("⚠️ Please fill out all fields.", "error");
         return;
-      }
-
-      try {
+      } try {
         // Reference to user's contacts subcollection
         const userDocRef = doc(db, "users", user.uid);
         const contactsRef = collection(userDocRef, "contacts");

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./css/navbar.css">
     <link rel="stylesheet" href="./css/footer.css">
 </head>
-
+<!-- 
 <body>
     <div id="navbar-placeholder"></div>
 
@@ -34,10 +34,35 @@
 
     <div id="footer-placeholder"></div>
 
-    <!-- Load JS file -->
     <script type="module" src="./js/navbar.js"></script>
     <script type="module" src="./js/footer.js"></script>
     <script type="module" src="/js/editprofile.js"></script>
+</body> -->
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="edit-profile">
+        <h2>Edit Profile</h2>
+        <form id="editProfileForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter new username" required />
+
+            <label for="bio">Bio:</label>
+            <textarea id="bio" placeholder="Enter your bio"></textarea>
+
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Firebase config must load first -->
+    <script type="module" src="/js/firebase/firebase-config.js"></script>
+    <!-- Then edit profile logic -->
+    <script type="module" src="/js/editprofile.js"></script>
+    <script type="module" src="./js/navbar.js"></script>
+    <script type="module" src="./js/footer.js"></script>
 </body>
 
 </html>

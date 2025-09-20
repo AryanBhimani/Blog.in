@@ -1,8 +1,11 @@
 // /js/post.js
 import { auth, db } from "./firebase/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { collection, addDoc, serverTimestamp } 
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const createPostSection = document.getElementById("create-post");
 const postBtn = document.getElementById("submit-post");
@@ -18,28 +21,28 @@ onAuthStateChanged(auth, (user) => {
       const content = contentInput.value.trim();
 
       if (!title || !content) {
-        alert("Please fill in both title and content!");
+        alert("⚠️ Please fill in both title and content!");
         return;
       }
 
       try {
-        // ✅ Only store blog fields, no authorName
+        // ✅ Store post in Firestore
         await addDoc(collection(db, "users", user.uid, "posts"), {
           title,
           content,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
         });
 
         alert("✅ Post published successfully!");
-        titleInput.value = "";
-        contentInput.value = "";
+        // Redirect after success
+        window.location.href = "profile.html";
       } catch (error) {
-        console.error("Error adding post:", error);
+        console.error("❌ Error adding post:", error);
         alert("❌ Failed to publish post");
       }
     });
   } else {
-    alert("You must log in first!");
+    alert("⚠️ You must log in first!");
     window.location.href = "auth.html";
   }
 });

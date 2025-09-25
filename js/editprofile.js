@@ -72,6 +72,7 @@ import { auth, db } from "/js/firebase/firebase-config.js";
 import {
   onAuthStateChanged,
   updateProfile,
+  reload
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
   doc,
@@ -86,55 +87,130 @@ const bioInput = document.getElementById("bio");
 
 let currentUser = null;
 
+// Domain check for debugging
+const currentDomain = window.location.hostname;
+console.log("🌐 Current domain:", currentDomain);
+console.log("🔥 Firebase project:", "blog-6e175");
+
+if (currentDomain === 'aryanbhimani.github.io') {
+  console.log("🚀 Running on GitHub Pages - ensure this domain is in Firebase authorized domains");
+} else if (currentDomain === 'localhost' || currentDomain === '127.0.0.1') {
+  console.log("🛠️ Running on localhost - should work fine");
+}
+
+// Enhanced error handling function
+function handleError(error, context) {
+  console.error(`❌ ${context} error:`, error);
+  
+  let errorMessage = `Error in ${context}: `;
+  
+  switch (error.code) {
+    case 'auth/unauthorized-domain':
+      errorMessage += `Domain '${currentDomain}' is not authorized. Please add it to Firebase Console → Authentication → Settings → Authorized domains.`;
+      break;
+    case 'auth/network-request-failed':
+      errorMessage += "Network error. Please check your internet connection.";
+      break;
+    case 'permission-denied':
+      errorMessage += "Access denied. Please check your login status and try again.";
+      break;
+    case 'unavailable':
+      errorMessage += "Service temporarily unavailable. Please try again later.";
+      break;
+    case 'auth/user-token-expired':
+      errorMessage += "Session expired. Please logout and login again.";
+      break;
+    default:
+      errorMessage += error.message || "Unknown error occurred.";
+  }
+  
+  alert(errorMessage);
+  return errorMessage;
+}
+
 // Load existing user data
 onAuthStateChanged(auth, async (user) => {
-  console.log("Auth state changed:", user ? "User authenticated" : "No user");
+  console.log("🔄 Auth state changed:", user ? `User authenticated: ${user.uid}` : "No user");
   
   if (user) {
     currentUser = user;
-    console.log("Current user ID:", user.uid);
-    console.log("Current display name:", user.displayName);
+    console.log("👤 User email:", user.email);
+    console.log("👤 Display name:", user.displayName);
 
     try {
+      console.log("📊 Loading user data from Firestore...");
+      
       // Load existing Firestore data
       const userDocRef = doc(db, "users", user.uid);
       const snap = await getDoc(userDocRef);
       
       if (snap.exists()) {
         const data = snap.data();
-        console.log("Loaded user data from Firestore:", data);
-        usernameInput.value = data.username || user.displayName || "";
-        bioInput.value = data.bio || "";
+        console.log("✅ Loaded data from Firestore:", data);
+        
+        // Populate form fields
+        if (usernameInput) {
+          usernameInput.value = data.username || user.displayName || "";
+        }
+        if (bioInput) {
+          bioInput.value = data.bio || "";
+        }
+        
+        console.log("✅ Form populated with existing data");
       } else {
-        console.log("No Firestore document found, using Auth data");
-        usernameInput.value = user.displayName || "";
-        bioInput.value = "";
+        console.log("📝 No Firestore document found, using Auth data");
+        
+        // Use Firebase Auth data as fallback
+        if (usernameInput) {
+          usernameInput.value = user.displayName || "";
+        }
+        if (bioInput) {
+          bioInput.value = "";
+        }
+        
+        console.log("ℹ️ Form populated with Auth data");
       }
     } catch (error) {
-      console.error("Error loading user data:", error);
-      usernameInput.value = user.displayName || "";
-      bioInput.value = "";
+      handleError(error, "loading profile data");
+      
+      // Fallback to Auth data even on error
+      if (usernameInput) {
+        usernameInput.value = user.displayName || "";
+      }
+      if (bioInput) {
+        bioInput.value = "";
+      }
     }
   } else {
-    console.log("No user authenticated, redirecting to auth");
-    alert("⚠️ Please login first!");
+    console.log("🔒 No user authenticated");
+    
+    // Check if it's an unauthorized domain issue
+    if (currentDomain !== 'localhost' && currentDomain !== '127.0.0.1') {
+      console.error(`⚠️ Potential unauthorized domain issue for: ${currentDomain}`);
+      alert(`⚠️ Authentication may not work on this domain (${currentDomain}). Please ensure this domain is added to Firebase Console → Authentication → Settings → Authorized domains.`);
+    } else {
+      alert("⚠️ Please login first!");
+    }
+    
     window.location.href = "auth.html";
   }
 });
 
 // Handle profile update
-editProfileForm.addEventListener("submit", async (e) => {
+editProfileForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  
+  console.log("🚀 Profile update initiated");
   
   if (!currentUser) {
     alert("❌ Please login first!");
     return;
   }
 
-  const newUsername = usernameInput.value.trim();
-  const newBio = bioInput.value.trim();
+  const newUsername = usernameInput?.value?.trim() || "";
+  const newBio = bioInput?.value?.trim() || "";
 
-  // Basic validation
+  // Validation
   if (!newUsername) {
     alert("❌ Username is required!");
     return;
@@ -145,9 +221,13 @@ editProfileForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  console.log("Starting profile update...");
-  console.log("New username:", newUsername);
-  console.log("New bio:", newBio);
+  if (newBio.length > 500) {
+    alert("❌ Bio must be less than 500 characters!");
+    return;
+  }
+
+  console.log("📝 New username:", newUsername);
+  console.log("📝 New bio length:", newBio.length);
 
   // Show loading state
   const submitButton = e.target.querySelector('button[type="submit"]');
@@ -156,15 +236,21 @@ editProfileForm.addEventListener("submit", async (e) => {
   submitButton.disabled = true;
 
   try {
-    // Step 1: Update Firebase Auth profile
-    console.log("Updating Firebase Auth profile...");
-    await updateProfile(currentUser, { 
-      displayName: newUsername 
-    });
+    console.log("🔄 Step 1: Updating Firebase Auth profile...");
+    
+    // Update Firebase Auth (for displayName)
+    await updateProfile(currentUser, { displayName: newUsername });
     console.log("✅ Firebase Auth profile updated");
 
-    // Step 2: Update Firestore document
-    console.log("Updating Firestore document...");
+    console.log("🔄 Step 2: Reloading user data...");
+    
+    // Reload user to ensure consistency
+    await reload(currentUser);
+    console.log("✅ User data reloaded");
+
+    console.log("🔄 Step 3: Updating Firestore document...");
+    
+    // Save/update Firestore user document
     const userDocRef = doc(db, "users", currentUser.uid);
     await setDoc(
       userDocRef,
@@ -173,41 +259,28 @@ editProfileForm.addEventListener("submit", async (e) => {
         username: newUsername,
         bio: newBio,
         email: currentUser.email,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
+        lastModified: new Date().toISOString() // Fallback timestamp
       },
       { merge: true }
     );
     console.log("✅ Firestore document updated");
 
+    // Verify the update
+    const updatedDoc = await getDoc(userDocRef);
+    if (updatedDoc.exists()) {
+      console.log("✅ Update verification successful:", updatedDoc.data());
+    }
+
     alert("✅ Profile updated successfully!");
     
-    // Redirect after short delay
+    // Redirect after success
     setTimeout(() => {
       window.location.href = "profile.html";
     }, 1000);
 
   } catch (error) {
-    console.error("❌ Profile update error:", error);
-    console.error("Error code:", error.code);
-    console.error("Error message:", error.message);
-    
-    let errorMessage = "❌ Error updating profile: ";
-    
-    switch (error.code) {
-      case 'auth/network-request-failed':
-        errorMessage += "Network error. Please check your connection.";
-        break;
-      case 'auth/too-many-requests':
-        errorMessage += "Too many requests. Try again later.";
-        break;
-      case 'permission-denied':
-        errorMessage += "Permission denied. Check your login status.";
-        break;
-      default:
-        errorMessage += error.message || "Unknown error occurred.";
-    }
-    
-    alert(errorMessage);
+    handleError(error, "profile update");
   } finally {
     // Reset button state
     submitButton.textContent = originalText;
@@ -218,18 +291,38 @@ editProfileForm.addEventListener("submit", async (e) => {
 // Add character counter for bio
 if (bioInput) {
   const charCounter = document.createElement('div');
-  charCounter.style.fontSize = '12px';
-  charCounter.style.color = '#666';
-  charCounter.style.marginTop = '5px';
-  charCounter.style.textAlign = 'right';
+  charCounter.style.cssText = `
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    text-align: right;
+  `;
+  
   bioInput.parentNode.appendChild(charCounter);
   
-  const updateCounter = () => {
+  function updateCounter() {
     const length = bioInput.value.length;
     charCounter.textContent = `${length}/500 characters`;
     charCounter.style.color = length > 450 ? '#e74c3c' : '#666';
-  };
+  }
   
   bioInput.addEventListener('input', updateCounter);
   updateCounter(); // Initial count
+}
+
+// Debug info (only show in development)
+if (currentDomain === 'localhost' || currentDomain === '127.0.0.1') {
+  console.log("🔧 Development mode detected");
+  console.log("🔧 Add debug=true to URL for more info");
+  
+  if (window.location.search.includes('debug=true')) {
+    setInterval(() => {
+      console.log('=== DEBUG INFO ===');
+      console.log('Current User:', currentUser);
+      console.log('Auth State:', auth.currentUser);
+      console.log('Username:', usernameInput?.value);
+      console.log('Bio:', bioInput?.value);
+      console.log('==================');
+    }, 10000);
+  }
 }

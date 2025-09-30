@@ -13,25 +13,32 @@ async function loadAllPosts() {
     let postsHtml = "";
 
     for (const userDoc of usersSnapshot.docs) {
+      const userId = userDoc.id; // Get the user ID
       const userData = userDoc.data();
-
-      // ✅ Always use username from Firestore user profile
       const authorName = userData.username || "Anonymous";
 
-      const postsRef = collection(db, "users", userDoc.id, "posts");
+      const postsRef = collection(db, "users", userId, "posts");
       const q = query(postsRef, orderBy("createdAt", "desc"));
       const postsSnapshot = await getDocs(q);
 
       postsSnapshot.forEach((postDoc) => {
         const post = postDoc.data();
+        const postId = postDoc.id; // Get the post ID
+
+        // Updated structure: Article card with a dedicated "Comment" button
         postsHtml += `
-          <article class="post-card">
+          <article class="post-card" data-post-id="${postId}" data-user-id="${userId}">
             <h3>${post.title}</h3>
-            <p>${post.content}</p>
+            <p>${post.content.substring(0, 150)}...</p>
             <small>
               By ${authorName} 
               on ${post.createdAt?.toDate().toLocaleString() || ""}
             </small>
+            <div class="post-actions">
+                <a href="singlepost.html?userId=${userId}&postId=${postId}" class="button comment-btn">
+                    💬 Comment
+                </a>
+            </div>
           </article>
         `;
       });

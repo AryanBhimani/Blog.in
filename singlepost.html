@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔥 Blog Post Detail</title>
+  <link rel="icon" type="image/png" href="./assets/images/blog.in.png">
+
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/feed.css">
+</head>
+
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <main class="container">
+    <section id="post-details" class="post-card">
+      <h2 id="post-title">Loading Post...</h2>
+      <p id="post-content" class="full-post-content"></p>
+      <small id="post-meta"></small>
+    </section>
+
+    <section id="comments-section">
+      <h3>💬 Comments</h3>
+      
+      <div id="comment-form-container" class="comment-form" style="display: none;">
+        <h4>Add a Comment</h4>
+        <textarea id="comment-input" placeholder="Write your comment here..." required></textarea>
+        <button id="submit-comment">Post Comment</button>
+      </div>
+      
+      <div id="comments-list">
+        <p>Be the first to comment!</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script type="module" src="./js/navbar.js"></script>
+  <script type="module" src="./js/footer.js"></script>
+  <script type="module" src="./js/singlepost.js"></script>
+</body>
+
+</html>

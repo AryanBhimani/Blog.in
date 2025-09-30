@@ -25,3 +25,41 @@
   color: #333;
   text-decoration: none;
 }
+
+
+/* Recommended CSS to align the button to the bottom right and set color */
+
+.post-card {
+    /* Required: The parent element must be relatively positioned */
+    position: relative; 
+    padding-bottom: 50px; /* Ensure there is space for the button at the bottom */
+    /* Other existing .post-card styles go here */
+}
+
+.post-card .post-actions {
+    /* Position the action container absolutely at the bottom right */
+    position: absolute;
+    bottom: 15px; /* Adjust vertical position */
+    right: 15px; /* Adjust horizontal position */
+    z-index: 10; /* Keep it visible over other elements */
+}
+
+/* Updated: Style to make the link look like a strong button with ORANGE color */
+.post-actions .button.comment-btn {
+    /* Inherit button styles from main.css */
+    display: inline-block;
+    padding: 8px 15px;
+    
+    /* Set the button color to a bright orange */
+    background-color: #ff8c00; /* DarkOrange for a nice contrast */
+    color: white; /* Keep text white */
+    
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.post-actions .button.comment-btn:hover {
+    background-color: #e67e22; /* Slightly darker orange on hover */
+}

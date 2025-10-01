@@ -35,7 +35,7 @@ async function loadAllPosts() {
               on ${post.createdAt?.toDate().toLocaleString() || ""}
             </small>
             <div class="post-actions">
-                <a href="singlepost.html?userId=${userId}&postId=${postId}" class="button comment-btn">
+                <a href="comment.html?userId=${userId}&postId=${postId}" class="button comment-btn">
                     💬 Comment
                 </a>
             </div>

@@ -1,4 +1,4 @@
-// /js/singlepost.js
+// /js/comment.js
 import { auth, db } from "./firebase/firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
@@ -65,7 +65,7 @@ if (!userId || !postId) {
     function setupCommentListener() {
         // Reference to the 'comments' subcollection for this specific post
         const commentsRef = collection(db, "users", userId, "posts", postId, "comments");
-        const q = query(commentsRef, orderBy("createdAt", "asc")); // Show latest comments at the bottom/top (changed to asc for easier reading)
+        const q = query(commentsRef, orderBy("createdAt", "asc")); 
 
         onSnapshot(q, (snapshot) => {
             if (snapshot.empty) {
@@ -76,9 +76,14 @@ if (!userId || !postId) {
             commentsListEl.innerHTML = "";
             snapshot.forEach((commentDoc) => {
                 const comment = commentDoc.data();
+                const profileLink = `profile.html?userId=${comment.userId}`; // Construct profile link
+
                 commentsListEl.innerHTML += `
                     <div class="comment-card">
-                        <p><strong>${comment.username || "Anonymous"}:</strong> ${comment.text}</p>
+                        <p>
+                            <strong><a href="${profileLink}" class="comment-author-link">${comment.username || "Anonymous"}</a>:</strong> 
+                            ${comment.text}
+                        </p>
                         <small>${comment.createdAt?.toDate().toLocaleString() || "Just now"}</small>
                     </div>
                 `;

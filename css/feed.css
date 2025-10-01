@@ -10,6 +10,10 @@
   border-radius: 12px;
   background: #fff;
   transition: 0.3s;
+  
+  /* Required for absolute positioning of the comment button on desktop */
+  position: relative; 
+  padding-bottom: 50px; /* Space for the button */
 }
 
 .post-card:hover {
@@ -17,7 +21,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.post-card h2 {
+.post-card h3 { 
   margin: 0;
 }
 
@@ -26,40 +30,120 @@
   text-decoration: none;
 }
 
+/* --- BUTTON STYLING --- */
 
-/* Recommended CSS to align the button to the bottom right and set color */
-
-.post-card {
-    /* Required: The parent element must be relatively positioned */
-    position: relative; 
-    padding-bottom: 50px; /* Ensure there is space for the button at the bottom */
-    /* Other existing .post-card styles go here */
-}
-
+/* Default Button Group Styling (for profile and feed posts) */
 .post-card .post-actions {
-    /* Position the action container absolutely at the bottom right */
+    display: flex; 
+    gap: 10px;      /* Space between buttons */
+    padding-top: 10px; /* Space above buttons */
+}
+
+
+/* Styling for the Comment button (Desktop) */
+/* 🔥 FIX: Explicitly setting the color using the .comment-btn class */
+.post-actions .comment-btn { 
+    /* Pinned to bottom-right on wider screens */
     position: absolute;
-    bottom: 15px; /* Adjust vertical position */
-    right: 15px; /* Adjust horizontal position */
-    z-index: 10; /* Keep it visible over other elements */
-}
+    bottom: 15px; 
+    right: 15px; 
+    z-index: 10; 
+    
+    /* Explicit Orange Color */
+    background-color: #ff5722; /* Use your brand orange color */
+    color: #ffffff; /* White text for contrast */
 
-/* Updated: Style to make the link look like a strong button with ORANGE color */
-.post-actions .button.comment-btn {
-    /* Inherit button styles from main.css */
     display: inline-block;
-    padding: 8px 15px;
-    
-    /* Set the button color to a bright orange */
-    background-color: #ff5722; /* DarkOrange for a nice contrast */
-    color: white; /* Keep text white */
-    
+    padding: 10px 20px;
     text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: all 0.2s ease;
 }
 
-.post-actions .button.comment-btn:hover {
-    background-color: #ff5722; /* Slightly darker orange on hover */
+.post-actions .comment-btn:hover {
+    background-color: #e64a19; /* Darker orange on hover */
+    box-shadow: 0 6px 12px rgba(255, 87, 34, 0.5);
+    transform: translateY(-2px);
+}
+
+
+/* Styling for Edit/Delete buttons (Subtle Action Button) */
+.post-actions .subtle-action-button {
+    /* Ensures profile buttons sit correctly (default flex item) */
+    flex-grow: 1;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+}
+
+
+/* ================================================= */
+/* MOBILE BUTTON FIX AND LAYOUT ENHANCEMENTS */
+/* ================================================= */
+
+@media (max-width: 600px) {
+    
+    .post-card {
+        padding-bottom: 20px; 
+    }
+
+    /* 1. Adjust ALL button groups on mobile */
+    .post-card .post-actions {
+        position: static; 
+        display: flex;
+        flex-direction: column; /* Stacks items vertically */
+        gap: 8px; 
+        margin-top: 15px;
+    }
+    
+    /* 2. Make all buttons full width and larger tap area */
+    .post-actions button,
+    /* Apply full-width fix to all action buttons */
+    .post-actions .action-button,
+    .post-actions .subtle-action-button,
+    .post-actions .comment-btn { 
+        width: 100% !important; 
+        flex-grow: 1; 
+        text-align: center;
+        padding: 12px 10px; 
+        margin: 0;
+        position: static; 
+    }
+    
+    /* --- Single Post View Mobile Adjustments --- */
+    #post-details h2 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Enhanced styles for the main post card on singlepost.html */
+#post-details.post-card {
+    padding-bottom: 30px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: none; 
+    margin-bottom: 40px;
+    border-top: 5px solid #ff5722; 
+    border-radius: 12px;
+}
+
+#post-details h2 {
+    font-size: 2.5rem;
+    color: #2c3e50; 
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+#post-details #post-meta {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: #888;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 15px;
+}
+
+#post-details #post-content {
+    font-size: 1.15rem;
+    line-height: 1.8; 
+    color: #444;
 }

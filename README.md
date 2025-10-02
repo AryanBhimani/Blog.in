@@ -9,25 +9,21 @@ This project demonstrates **Firebase Authentication and Firestore Database** int
 ## 🚀 Features
 
 - 🔐 **User Authentication**
-
   - Register new users
   - Login/Logout functionality
   - Firebase Authentication
 
 - 📝 **Blog Management**
-
   - Create, edit, and delete blog posts
   - Rich text editor for posts
   - Store posts linked to logged-in users
 
 - 👤 **User Profiles**
-
   - Edit profile details
   - View personal blogs
   - Profile picture support
 
 - 💬 **Comments**
-
   - Comment on blog posts
   - Firebase Firestore integration
 
@@ -38,26 +34,51 @@ This project demonstrates **Firebase Authentication and Firestore Database** int
 ---
 
 ## 🏗️ Project Structure
-
-Blog.in-main/
-│── about.html # About page
-│── auth.html # Login/Register page
-│── comment.html # Comment page
-│── contact.html # Contact page
-│── editprofile.html # Edit user profile
-│── index.html # Home page (blog feed)
-│── post.html # Single post page
-│── profile.html # User profile page
-│── assets/ # Images and static assets
-│── components/ # Navbar & Footer
-│── css/ # Styling (CSS files per page)
-│── js/ # JavaScript (functionality per page)
-│ ├── firebase/ # Firebase config & auth handling
-│ ├── feed.js # Blog feed handling
-│ ├── post.js # Blog posting logic
-│ ├── profile.js # User profile logic
-│ └── ...
-│── README.md # Documentation
+```
+blog-in/
+├── assets/
+│   └── images/
+│       ├── blog.in.png
+│       └── mobintix.png
+├── components/
+│   ├── footer.html
+│   └── navbar.html
+├── styles/
+│   ├── about.css
+│   ├── auth.css
+│   ├── comments.css
+│   ├── contact.css
+│   ├── editprofile.css
+│   ├── feed.css
+│   ├── footer.css
+│   ├── main.css
+│   ├── navbar.css
+│   ├── posts.css
+│   ├── profile.css
+│   └── responsive.css
+├── js/
+│   ├── firebase/
+│   │   ├── auth.js
+│   │   └── firebase-config.js
+│   ├── comments.js
+│   ├── contact.js
+│   ├── editprofile.js
+│   ├── feed.js
+│   ├── footer.js
+│   ├── navbar.js
+│   ├── posts.js
+│   ├── profile.js
+│   └── search.js
+├── about.html
+├── auth.html
+├── comment.html
+├── contact.html
+├── editprofile.html
+├── index.html
+├── profile.html
+├── search.html
+└── README.md
+```
 
 ---
 
@@ -88,11 +109,6 @@ flowchart TD
         C
     end
 
-
-
-
-
-
 📌 Future Improvements
 
 Add likes & reactions on posts
@@ -100,4 +116,3 @@ Add likes & reactions on posts
 Improve blog editor with markdown support
 
 Deploy using Firebase Hosting.
-```

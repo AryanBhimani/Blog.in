@@ -93,7 +93,8 @@ blog-in/
 
 ## 🔑 System Architecture
 
-```mermaid
+```
+mermaid
 flowchart TD
     A[User] -->|Login / Register| B[Firebase Auth]
     B --> C[Firestore Database]
@@ -116,3 +117,4 @@ Add likes & reactions on posts
 Improve blog editor with markdown support
 
 Deploy using Firebase Hosting.
+```

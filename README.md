@@ -9,21 +9,25 @@ This project demonstrates **Firebase Authentication and Firestore Database** int
 ## 🚀 Features
 
 - 🔐 **User Authentication**
+
   - Register new users
   - Login/Logout functionality
   - Firebase Authentication
 
 - 📝 **Blog Management**
+
   - Create, edit, and delete blog posts
   - Rich text editor for posts
   - Store posts linked to logged-in users
 
 - 👤 **User Profiles**
+
   - Edit profile details
   - View personal blogs
   - Profile picture support
 
 - 💬 **Comments**
+
   - Comment on blog posts
   - Firebase Firestore integration
 
@@ -34,8 +38,6 @@ This project demonstrates **Firebase Authentication and Firestore Database** int
 ---
 
 ## 🏗️ Project Structure
-
-
 
 Blog.in-main/
 │── about.html # About page
@@ -56,7 +58,6 @@ Blog.in-main/
 │ ├── profile.js # User profile logic
 │ └── ...
 │── README.md # Documentation
-
 
 ---
 
@@ -99,3 +100,4 @@ Add likes & reactions on posts
 Improve blog editor with markdown support
 
 Deploy using Firebase Hosting.
+```

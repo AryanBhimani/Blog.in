@@ -13,7 +13,7 @@ async function loadAllPosts() {
     let postsHtml = "";
 
     for (const userDoc of usersSnapshot.docs) {
-      const userId = userDoc.id; // Get the user ID
+      const userId = userDoc.id; 
       const userData = userDoc.data();
       const authorName = userData.username || "Anonymous";
 
@@ -23,18 +23,25 @@ async function loadAllPosts() {
 
       postsSnapshot.forEach((postDoc) => {
         const post = postDoc.data();
-        const postId = postDoc.id; // Get the post ID
+        const postId = postDoc.id; 
 
-        // Updated structure: Article card with a dedicated "Comment" button
+        // Each post card with hidden full content
         postsHtml += `
           <article class="post-card" data-post-id="${postId}" data-user-id="${userId}">
             <h3>${post.title}</h3>
-            <p>${post.content.substring(0, 150)}...</p>
+            <p class="excerpt">${post.content.substring(0, 150)}...</p>
+            
+            <div class="full-content" style="display:none;">
+              ${post.content}
+            </div>
+
             <small>
               By ${authorName} 
               on ${post.createdAt?.toDate().toLocaleString() || ""}
             </small>
+
             <div class="post-actions">
+                <button class="toggle-btn">Read More</button>
                 <a href="comment.html?userId=${userId}&postId=${postId}" class="button comment-btn">
                     💬 Comment
                 </a>
@@ -45,6 +52,26 @@ async function loadAllPosts() {
     }
 
     postsList.innerHTML = postsHtml || "<p>No blogs yet. Be the first!</p>";
+
+    // Attach expand/collapse functionality
+    document.querySelectorAll(".toggle-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const card = e.target.closest(".post-card");
+        const excerpt = card.querySelector(".excerpt");
+        const fullContent = card.querySelector(".full-content");
+
+        if (fullContent.style.display === "none") {
+          fullContent.style.display = "block";
+          excerpt.style.display = "none";
+          btn.textContent = "Show Less";
+        } else {
+          fullContent.style.display = "none";
+          excerpt.style.display = "block";
+          btn.textContent = "Read More";
+        }
+      });
+    });
+
   } catch (error) {
     console.error("Error loading posts:", error);
     postsList.innerHTML = "<p>Failed to load blogs.</p>";

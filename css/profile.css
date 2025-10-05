@@ -170,3 +170,21 @@
     gap: 18px;
   }
 }
+
+
+/* Edit & Delete buttons inside posts */
+.subtle-action-button {
+  color: #fff;                /* white text */
+  background-color: #ff5722;  /* orange background */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-right: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.subtle-action-button:hover {
+  background-color: #e64a19;  /* darker orange on hover */
+}

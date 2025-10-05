@@ -31,6 +31,8 @@
     font-family: inherit;
     font-size: 1rem;
     transition: border-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .comment-form textarea:focus {
@@ -38,10 +40,24 @@
     outline: none;
 }
 
+/* ✅ Force button color to white */
 .comment-form button {
     align-self: flex-start; 
     padding: 10px 20px;
     font-weight: 600;
+    background-color: #ff5722 !important; /* Force orange */
+    color: #ffffff !important; /* Force white text */
+    border: none !important;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    margin-top: 0.8rem;
+    display: inline-block;
+}
+
+.comment-form button:hover {
+    background-color: #e64a19 !important; /* Darker orange on hover */
+    transform: translateY(-2px);
 }
 
 /* --- Comments List Styling --- */
@@ -64,7 +80,7 @@
 
 .comment-card:hover {
     transform: translateY(-2px); 
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 12px rgba(250, 248, 248, 0.08);
 }
 
 /* Style for the author name (Bold and Branded) */

@@ -40,12 +40,13 @@ async function loadAllPosts() {
               on ${post.createdAt?.toDate().toLocaleString() || ""}
             </small>
 
-            <div class="post-actions">
-                <button class="toggle-btn">Read More</button>
-                <a href="comment.html?userId=${userId}&postId=${postId}" class="button comment-btn">
+            <div class="post-footer-actions"> 
+                <button class="toggle-btn primary-action-button">Read More</button> 
+                <a href="comment.html?userId=${userId}&postId=${postId}" class="comment-btn">
                     💬 Comment
                 </a>
             </div>
+            
           </article>
         `;
       });

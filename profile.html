@@ -18,7 +18,6 @@
   <div id="navbar-placeholder"></div>
 
   <main class="container profile-page">
-    <!-- Profile Header -->
     <section class="profile-header" id="profile-info">
       <div class="profile-avatar">
         <img src="./assets/images/blog.in.png" alt="User Avatar" class="avatar">
@@ -26,27 +25,44 @@
       <div class="profile-details">
         <h2 id="profile-name">User Name</h2>
         <p id="profile-bio">A short bio goes here. Passionate about blogging, coding, and sharing ideas 🚀</p>
+        
+        <button id="follow-btn" style="display: none;">Follow</button> 
+        
         <button id="edit-profile" onclick="window.location.href='editprofile.html'">Edit Profile</button>
         <button id="post" onclick="window.location.href='post.html'">Blog Post</button>
         <button id="Login" onclick="window.location.href='auth.html'">Login</button>
       </div>
     </section>
 
-    <!-- Profile Stats -->
     <section class="profile-stats">
       <div>
-        <h3>0</h3>
+        <h3 id="posts-count">0</h3>
         <p>Posts</p>
       </div>
-      <div>
-        <h3>0</h3>
+      <div id="followers-stat" class="stat-clickable">
+        <h3 id="followers-count">0</h3>
         <p>Followers</p>
       </div>
-      <div>
-        <h3>0</h3>
+      <div id="following-stat" class="stat-clickable">
+        <h3 id="following-count">0</h3>
         <p>Following</p>
       </div>
     </section>
+    
+    <section id="following-list-section" class="user-list" style="display: none;">
+      <h2>Following</h2>
+      <div id="following-users">
+        <p>Loading...</p>
+      </div>
+    </section>
+    
+    <section id="followers-list-section" class="user-list" style="display: none;">
+      <h2>Followers</h2>
+      <div id="followers-users">
+        <p>Loading...</p>
+      </div>
+    </section>
+    
     <section id="user-posts" class="post-list">
       <h2>📝 My Blogs</h2>
       <div id="user-posts-list"></div>

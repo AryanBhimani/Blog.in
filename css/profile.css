@@ -79,6 +79,29 @@
   background: #388e3c;
 }
 
+/* 🚨 NEW: Follow/Unfollow Button Styles */
+#follow-btn {
+  /* Style to match your primary buttons */
+  background-color: #ff5722; /* Your primary orange */
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px; 
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-right: 12px;
+  margin-top: 5px; 
+}
+
+#follow-btn.unfollow {
+  /* Style for the Unfollow state */
+  background-color: #ccc;
+  color: #333;
+  border: 1px solid #999;
+  padding: 9px 21px; /* Adjust for border */
+}
+
 /* Profile Stats */
 .profile-stats {
   display: flex;
@@ -103,6 +126,63 @@
   font-size: 15px; /* increased */
   color: #666;
 }
+
+/* 🚨 NEW: Styling for Clickable Follow/Following Stats */
+.profile-stats .stat-clickable {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 8px;
+    padding: 5px 10px;
+    /* Adjust margin to increase click area without affecting main layout */
+    margin: -5px -10px; 
+}
+
+.profile-stats .stat-clickable:hover {
+    background-color: #f0f0f0;
+}
+
+/* 🚨 NEW: Styling for the Follower/Following Lists */
+.user-list {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fff;
+    width: 100%; 
+}
+
+.user-list h2 {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}
+
+#followers-users,
+#following-users {
+    /* Layout for the user names inside the list */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0; 
+    list-style: none;
+}
+
+.user-list-item {
+    /* Style for each user name link */
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    transition: background-color 0.2s;
+    font-weight: 600; 
+}
+
+.user-list-item:hover {
+    background-color: #f5f5f5;
+}
+
 
 /* Posts Section */
 .profile-posts h2 {
@@ -163,6 +243,14 @@
   .profile-details button {
     width: 100%;
     margin-bottom: 12px;
+    margin-right: 0;
+  }
+  
+  /* Make sure follow button goes full width on mobile */
+  #follow-btn {
+    width: 100%;
+    margin-bottom: 12px;
+    margin-right: 0;
   }
 
   .profile-stats {

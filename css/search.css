@@ -1,91 +1,6 @@
-/* Global Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Body */
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f9f9f9;
-    color: #333;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    padding: 0;
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Container */
-.container {
-    width: 90%;
-    max-width: 1100px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* Page Title */
-.page-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 20px 0;
-    color: #ff5722;
-    text-align: center;
-}
-
-/* Buttons (Global) */
-button {
-    background: #ff5722;
-    color: #000000;
-    border: none;
-    border-radius: 6px;
-    padding: 0.7rem 1.2rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #e64a19;
-}
-
-/* Inputs (Global) */
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: #ff5722;
-    box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
-}
-
-/* Links */
-a {
-    color: #ff5722;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
 /* Search Page Specific Styles */
-.search {
-    max-width: 700px;
+.search { 
+    max-width: 700px; 
     margin: 0 auto;
     flex: 1;
     width: 100%;
@@ -99,25 +14,25 @@ a:hover {
     font-size: 2rem;
 }
 
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
+label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 600; 
     color: #4a5568;
 }
 
-.controls {
-    display: flex;
-    gap: 8px;
+.controls { 
+    display: flex; 
+    gap: 8px; 
     margin-bottom: 16px;
 }
 
-.controls input[type="search"] {
-    flex: 1;
-    padding: 12px 16px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+.controls input[type="search"] { 
+    flex: 1; 
+    padding: 12px 16px; 
+    font-size: 16px; 
+    border: 1px solid #ddd; 
+    border-radius: 6px; 
     transition: all 0.2s;
     margin-bottom: 0;
 }
@@ -128,13 +43,13 @@ label {
     box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
 }
 
-.search button {
-    padding: 12px 20px;
-    font-size: 16px;
+.search button { 
+    padding: 12px 20px; 
+    font-size: 16px; 
     border: none;
     background: #ff5722;
     color: #000000;
-    border-radius: 6px;
+    border-radius: 6px; 
     cursor: pointer;
     transition: all 0.2s;
     font-weight: 600;
@@ -154,14 +69,42 @@ label {
     background: #4a5568;
 }
 
-.results {
-    margin-top: 24px;
+/* Search Filters */
+.search-filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
-.item {
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
+.filter-btn {
+    background: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.filter-btn.active {
+    background: #ff5722;
+    color: #000000;
+}
+
+.filter-btn:hover:not(.active) {
+    background: #cbd5e0;
+}
+
+.results { 
+    margin-top: 24px; 
+}
+
+.item { 
+    padding: 20px; 
+    border-radius: 8px; 
+    border: 1px solid #e2e8f0; 
     margin-bottom: 16px;
     background: white;
     transition: all 0.3s ease;
@@ -174,9 +117,9 @@ label {
     border-color: #cbd5e0;
 }
 
-.title {
-    font-weight: 700;
-    margin-bottom: 8px;
+.title { 
+    font-weight: 700; 
+    margin-bottom: 8px; 
     font-size: 1.25rem;
 }
 
@@ -191,21 +134,21 @@ label {
     text-decoration: underline;
 }
 
-.excerpt {
-    color: #4a5568;
+.excerpt { 
+    color: #4a5568; 
     line-height: 1.6;
 }
 
-mark {
-    background: #ffea90;
-    padding: 0 2px;
+mark { 
+    background: #ffea90; 
+    padding: 0 2px; 
     border-radius: 2px;
     font-weight: 600;
 }
 
-.meta {
-    font-size: 14px;
-    color: #666;
+.meta { 
+    font-size: 14px; 
+    color: #666; 
     margin-bottom: 8px;
     display: flex;
     flex-wrap: wrap;
@@ -222,8 +165,18 @@ mark {
     font-weight: 500;
 }
 
-.no-results {
-    color: #666;
+.user-badge {
+    background: #ff5722 !important;
+    color: #000000 !important;
+}
+
+.post-badge {
+    background: #4299e1 !important;
+    color: white !important;
+}
+
+.no-results { 
+    color: #666; 
     padding: 40px 20px;
     text-align: center;
     font-size: 1.1rem;
@@ -270,126 +223,130 @@ mark {
     color: #2d3748;
 }
 
-/* Navbar Styles */
-.navbar {
+/* User Profile Item Styles */
+.user-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #ff5722;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    font-weight: bold;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.user-username {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.user-bio {
+    color: #4a5568;
+    line-height: 1.5;
+}
+
+/* Profile Link Styles */
+.profile-link {
+    cursor: pointer;
+    color: #ff5722;
+}
+
+.profile-link:hover {
+    text-decoration: underline;
+}
+
+/* Profile Preview Modal */
+.profile-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-modal.active {
+    display: flex;
+}
+
+.profile-modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.profile-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    margin-bottom: 20px;
 }
 
-.logo {
-    font-size: 20px;
-    font-weight: bold;
-    color: #ff5722;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-}
-
-.logo img {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ff5722;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.nav-links li a:hover {
-    color: #ff5722;
-}
-
-/* Login Button Styles */
-.login-button {
-    display: inline-block;
-    background-color: #ff5722;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-decoration: none;
+.profile-modal-close {
+    background: none;
     border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.login-button:hover {
-    background-color: #e64a19;
-    transform: translateY(-2px);
-}
-
-.login-button:active {
-    background-color: #d84315;
-    transform: translateY(0);
-}
-
-/* Mobile menu */
-.menu-toggle {
-    display: none;
     font-size: 24px;
     cursor: pointer;
+    color: #666;
 }
 
-/* Responsive Layout */
+/* Responsive Layout for Search */
 @media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 15px;
-    }
-
-    .page-title {
-        font-size: 1.6rem;
-    }
-
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background: #fff;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-    .nav-links.show {
-        display: flex;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
     .controls {
         flex-direction: column;
     }
-
+    
     .search button {
         width: 100%;
     }
-
+    
     .item {
         padding: 16px;
+    }
+
+    .user-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .user-avatar {
+        align-self: center;
+    }
+
+    .search-filters {
+        justify-content: center;
+    }
+
+    .profile-modal-content {
+        padding: 20px;
+        margin: 20px;
     }
 }

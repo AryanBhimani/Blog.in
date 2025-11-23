@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -7,31 +8,32 @@
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/navbar.css">
     <link rel="stylesheet" href="./css/footer.css">
-    <link rel="stylesheet" href="./css/search.css"> 
+    <link rel="stylesheet" href="./css/search.css">
 </head>
+
 <body>
     <div id="navbar-placeholder"></div>
     <main class="search" role="main">
         <h1>Search Blog.in</h1>
 
         <form id="searchForm" role="search" action="./search.html" method="get">
-            <label for="query">Find posts</label>
+            <label for="query">Find posts, users, and blogs</label>
             <div class="controls">
-                <input 
-                    id="query" 
-                    name="q" 
-                    type="search" 
-                    placeholder="Search posts, titles, tags..." 
-                    autocomplete="off" 
-                    aria-describedby="searchHelp"
-                />
+                <input id="query" name="q" type="search" placeholder="Search posts, users, profiles, blogs..."
+                    autocomplete="off" aria-describedby="searchHelp" />
                 <button id="searchBtn" type="submit">Search</button>
                 <button id="clearBtn" type="button" title="Clear">Clear</button>
             </div>
             <div id="searchHelp" class="search-stats" aria-live="polite">
-                Enter a search term to find posts
+                Enter a search term to find posts, users, and blogs
             </div>
         </form>
+
+        <div class="search-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="posts">Posts</button>
+            <button class="filter-btn" data-filter="users">Users</button>
+        </div>
 
         <div id="firebaseStatus" class="info-notice">
             Loading search functionality...
@@ -40,401 +42,24 @@
         <div id="results" class="results" aria-live="polite"></div>
     </main>
 
-    <!-- Built-in Firebase Configuration -->
-    <script>
-        // Firebase Configuration - Replace these with your actual Firebase project settings
-        const firebaseConfig = {
-            // Replace these values with your actual Firebase config
-            apiKey: "AIzaSyExampleAppConfigKey123",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
-        };
-        
-        // Make it globally available
-        window.firebaseConfig = firebaseConfig;
-    </script>
-
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-        // DOM elements
-        const queryInput = document.getElementById('query');
-        const resultsEl = document.getElementById('results');
-        const clearBtn = document.getElementById('clearBtn');
-        const searchBtn = document.getElementById('searchBtn');
-        const searchHelp = document.getElementById('searchHelp');
-        const firebaseStatus = document.getElementById('firebaseStatus');
-
-        // Search state
-        let index = [];
-        let lastQuery = '';
-        let firebaseInitialized = false;
-
-        // Initialize Firebase and load data
-        async function initializeFirebase() {
-            try {
-                updateFirebaseStatus('Connecting to Firebase...', 'loading');
-                
-                // Check if firebaseConfig is available
-                if (typeof firebaseConfig === 'undefined') {
-                    throw new Error('Firebase configuration not found.');
-                }
-
-                // Check if this is the example config
-                if (firebaseConfig.projectId === 'your-project-id') {
-                    updateFirebaseStatus(
-                        'Using example configuration. Please update with your Firebase project details.', 
-                        'error'
-                    );
-                    loadSampleData();
-                    return;
-                }
-
-                // Initialize Firebase
-                const app = initializeApp(firebaseConfig);
-                const db = getFirestore(app);
-                
-                updateFirebaseStatus('Loading posts from Firestore...', 'loading');
-                
-                // Load all posts from Firestore
-                const querySnapshot = await getDocs(collection(db, 'posts'));
-                
-                if (querySnapshot.empty) {
-                    updateFirebaseStatus('No posts found in Firestore. Loading sample data.', 'error');
-                    loadSampleData();
-                    return;
-                }
-                
-                // Map Firestore documents to search index format
-                index = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return {
-                        id: doc.id,
-                        title: data.title || '',
-                        url: data.url || data.slug || `/posts/${doc.id}`,
-                        excerpt: data.excerpt || data.description || data.content?.substring(0, 200) || '',
-                        tags: Array.isArray(data.tags) ? data.tags : 
-                              (data.tags ? String(data.tags).split(',').map(s => s.trim()) : []),
-                        date: formatDate(data.date || data.published || data.createdAt || data.timestamp || ''),
-                        content: data.content || data.body || '',
-                        author: data.author || data.user || ''
-                    };
-                });
-                
-                firebaseInitialized = true;
-                updateFirebaseStatus(`✅ Loaded ${index.length} posts from Firebase`, 'success');
-                updateUIState('ready');
-                
-                // If there's a query in URL, perform search
-                const params = new URLSearchParams(location.search);
-                const q = params.get('q') || '';
-                if (q) {
-                    queryInput.value = q;
-                    doSearch(q);
-                }
-                
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                updateFirebaseStatus(`❌ Error: ${error.message}. Loading sample data.`, 'error');
-                loadSampleData();
-            }
-        }
-
-        // Format date from various possible formats
-        function formatDate(dateValue) {
-            if (!dateValue) return '';
-            
-            try {
-                // If it's a Firestore timestamp
-                if (dateValue.toDate) {
-                    return dateValue.toDate().toLocaleDateString();
-                }
-                
-                // If it's a string or number
-                const date = new Date(dateValue);
-                if (!isNaN(date.getTime())) {
-                    return date.toLocaleDateString();
-                }
-                
-                return String(dateValue);
-            } catch (e) {
-                return String(dateValue);
-            }
-        }
-
-        // Load sample data when Firebase fails or not configured
-        function loadSampleData() {
-            updateFirebaseStatus('📝 Loading sample data for demonstration...', 'info');
-            
-            // Sample data for demonstration
-            index = [
-                {
-                    id: "1",
-                    title: "Getting Started with Aryan's Blog",
-                    url: "/posts/1",
-                    excerpt: "Welcome to my blog! I'm Aryan and this is where I share my thoughts on technology, programming, and life experiences.",
-                    tags: ["introduction", "getting-started", "aryan", "blog"],
-                    date: "March 15, 2024",
-                    content: "Welcome to my blog! I'm Aryan and this is where I share my thoughts...",
-                    author: "Aryan"
-                },
-                {
-                    id: "2", 
-                    title: "Aryan's Journey in Web Development",
-                    url: "/posts/2",
-                    excerpt: "Follow Aryan's journey from beginner to full-stack developer. Learn about the technologies I've mastered.",
-                    tags: ["web-development", "career", "javascript", "aryan"],
-                    date: "April 2, 2024",
-                    content: "Follow Aryan's journey from beginner to full-stack developer...",
-                    author: "Aryan"
-                }
-            ];
-            
-            firebaseInitialized = false;
-            updateFirebaseStatus(`📚 Loaded ${index.length} sample posts.`, 'info');
-            updateUIState('ready');
-            
-            // If there's a query in URL, perform search
-            const params = new URLSearchParams(location.search);
-            const q = params.get('q') || '';
-            if (q) {
-                queryInput.value = q;
-                doSearch(q);
-            }
-        }
-
-        // Update Firebase connection status
-        function updateFirebaseStatus(message, type = 'info') {
-            const className = type === 'error' ? 'error-notice' : 
-                            type === 'success' ? 'success-notice' : 
-                            type === 'loading' ? 'info-notice' : 'info-notice';
-            
-            firebaseStatus.innerHTML = message;
-            firebaseStatus.className = className;
-        }
-
-        // Update UI based on state
-        function updateUIState(state, message = '') {
-            switch(state) {
-                case 'loading':
-                    searchBtn.disabled = true;
-                    searchHelp.textContent = 'Loading search index...';
-                    break;
-                case 'ready':
-                    searchBtn.disabled = false;
-                    const query = queryInput.value.trim();
-                    if (!query) {
-                        searchHelp.textContent = `Ready to search ${index.length} posts`;
-                    }
-                    break;
-                case 'error':
-                    searchBtn.disabled = false;
-                    searchHelp.textContent = message;
-                    break;
-            }
-        }
-
-        // Highlight search terms in text
-        function highlight(text, terms) {
-            if (!terms.length) return escapeHtml(text);
-            
-            let highlighted = escapeHtml(text);
-            terms.forEach(term => {
-                const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
-                highlighted = highlighted.replace(regex, '<mark>$1</mark>');
-            });
-            return highlighted;
-        }
-
-        // Escape HTML to prevent XSS
-        function escapeHtml(s) {
-            if (typeof s !== 'string') return '';
-            return s.replace(/[&<>"']/g, c => 
-                ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
-            );
-        }
-
-        // Escape regex special characters
-        function escapeRegExp(s) {
-            return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-
-        // Perform search on the index
-        function search(q) {
-            q = (q || '').trim();
-            if (!q) return [];
-            
-            const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
-            const termSet = new Set(terms);
-            
-            return index
-                .map(item => {
-                    const searchText = [
-                        item.title || '',
-                        item.excerpt || '',
-                        item.content || '',
-                        Array.isArray(item.tags) ? item.tags.join(' ') : '',
-                        item.author || ''
-                    ].join(' ').toLowerCase();
-                    
-                    let score = 0;
-                    for (const term of termSet) {
-                        if (item.title && item.title.toLowerCase().includes(term)) {
-                            score += 5;
-                        }
-                        
-                        if (Array.isArray(item.tags) && item.tags.some(tag => 
-                            tag.toLowerCase().includes(term))) {
-                            score += 3;
-                        }
-                        
-                        const contentMatches = (item.content || '').toLowerCase().split(term).length - 1;
-                        score += contentMatches * 0.1;
-                        
-                        const excerptMatches = (item.excerpt || '').toLowerCase().split(term).length - 1;
-                        score += excerptMatches * 0.5;
-                        
-                        if (item.author && item.author.toLowerCase().includes(term)) {
-                            score += 2;
-                        }
-                    }
-                    
-                    return {item, score};
-                })
-                .filter(r => r.score > 0)
-                .sort((a, b) => b.score - a.score)
-                .map(r => r.item);
-        }
-
-        // Render search results
-        function render(results, q) {
-            const terms = q ? q.toLowerCase().split(/\s+/).filter(Boolean) : [];
-            
-            if (q) {
-                searchHelp.textContent = results.length === 0 ? 
-                    `No results found for "${q}"` : 
-                    `Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${q}"`;
-            } else {
-                searchHelp.textContent = `Ready to search ${index.length} posts`;
-            }
-            
-            if (!q) {
-                resultsEl.innerHTML = '<div class="no-results">Enter a query to search posts.</div>';
-                return;
-            }
-            
-            if (results.length === 0) {
-                resultsEl.innerHTML = '<div class="no-results">No results found. Try different keywords.</div>';
-                return;
-            }
-            
-            const frag = document.createDocumentFragment();
-            
-            for (const r of results) {
-                const div = document.createElement('div');
-                div.className = 'item';
-                
-                const title = document.createElement('div');
-                title.className = 'title';
-                title.innerHTML = `<a href="${escapeHtml(r.url || '#')}">${highlight(r.title || 'Untitled Post', terms)}</a>`;
-                
-                const meta = document.createElement('div');
-                meta.className = 'meta';
-                
-                const dateParts = [];
-                if (r.date) {
-                    dateParts.push(`<time>${escapeHtml(r.date)}</time>`);
-                }
-                
-                if (r.author) {
-                    dateParts.push(`by ${escapeHtml(r.author)}`);
-                }
-                
-                const tags = Array.isArray(r.tags) && r.tags.length > 0 ? 
-                    r.tags.map(t => `<span>${escapeHtml(t)}</span>`).join('') : '';
-                
-                meta.innerHTML = dateParts.join(' • ');
-                if (tags) {
-                    const tagsDiv = document.createElement('div');
-                    tagsDiv.innerHTML = tags;
-                    tagsDiv.style.marginTop = '8px';
-                    meta.appendChild(tagsDiv);
-                }
-                
-                const excerpt = document.createElement('div');
-                excerpt.className = 'excerpt';
-                excerpt.innerHTML = highlight(r.excerpt || '', terms);
-                
-                div.appendChild(title);
-                if (meta.innerHTML) div.appendChild(meta);
-                if (excerpt.innerHTML) div.appendChild(excerpt);
-                
-                frag.appendChild(div);
-            }
-            
-            resultsEl.innerHTML = '';
-            resultsEl.appendChild(frag);
-        }
-
-        // Debounce function to limit search frequency
-        function debounce(fn, wait = 300) {
-            let timeout;
-            return (...args) => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => fn(...args), wait);
-            };
-        }
-
-        // Perform search with debouncing
-        const doSearch = debounce((q) => {
-            if (q === lastQuery) return;
-            
-            lastQuery = q;
-            const results = search(q);
-            render(results, q);
-        }, 200);
-
-        // Event listeners
-        queryInput.addEventListener('input', (e) => {
-            const q = e.target.value;
-            
-            const u = new URL(location);
-            if (q) {
-                u.searchParams.set('q', q);
-            } else {
-                u.searchParams.delete('q');
-            }
-            history.replaceState({}, '', u);
-            
-            doSearch(q);
-        });
-
-        clearBtn.addEventListener('click', () => {
-            queryInput.value = '';
-            queryInput.focus();
-            history.replaceState({}, '', location.pathname);
-            render([], '');
-            lastQuery = '';
-        });
-
-        document.getElementById('searchForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const q = queryInput.value;
-            doSearch(q);
-        });
-
-        // Initialize when page loads
-        initializeFirebase();
-    </script>
+    <!-- Profile Preview Modal -->
+    <div id="profileModal" class="profile-modal">
+        <div class="profile-modal-content">
+            <div class="profile-modal-header">
+                <h3>User Profile</h3>
+                <button class="profile-modal-close">&times;</button>
+            </div>
+            <div id="profileModalContent">
+                <!-- Profile content will be loaded here -->
+            </div>
+        </div>
+    </div>
 
     <div id="footer-placeholder"></div>
 
     <script type="module" src="./js/navbar.js"></script>
     <script type="module" src="./js/footer.js"></script>
+    <script type="module" src="./js/search.js"></script>
 </body>
+
 </html>

@@ -13,7 +13,19 @@ const firebaseConfig = {
   appId: "1:1030746340117:web:7551aab0da35192040871c",
 };
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+// Export for use in other modules
+export { app, auth, db, storage };
+
+// Also make available globally for compatibility
+window.firebaseApp = app;
+window.firebaseAuth = auth;
+window.firebaseDb = db;
+window.firebaseStorage = storage;
+
+console.log('Firebase v11.0.1 initialized successfully');

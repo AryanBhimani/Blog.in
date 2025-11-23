@@ -7,9 +7,8 @@
     <link rel="icon" type="image/png" href="./assets/images/blog.in.png">
     <title>🚀 Search Blog.in</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/navbar.css">
-    <link rel="stylesheet" href="./css/footer.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
     <style>
         /* ===== MODERN SEARCH UI STYLES ===== */
         :root {
@@ -29,11 +28,18 @@
             --transition: all 0.3s ease;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         .search-container {
@@ -457,7 +463,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .info-notice {
@@ -508,8 +516,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .profile-modal.active {
@@ -530,11 +543,12 @@
         }
 
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(20px);
             }
-            to { 
+
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -591,38 +605,39 @@
             .search-container {
                 padding: 1rem;
             }
-            
+
             .search-box {
                 padding: 1.5rem;
             }
-            
+
             .results-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .search-actions {
                 flex-direction: column;
                 align-items: stretch;
             }
-            
-            .search-btn, .clear-btn {
+
+            .search-btn,
+            .clear-btn {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .user-card {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .user-avatar {
                 align-self: center;
             }
-            
+
             .user-stats {
                 justify-content: center;
             }
-            
+
             .profile-modal-content {
                 padding: 1.5rem;
                 margin: 1rem;
@@ -633,24 +648,24 @@
             .search-header h1 {
                 font-size: 2rem;
             }
-            
+
             .search-header p {
                 font-size: 1rem;
             }
-            
+
             .search-box {
                 padding: 1rem;
             }
-            
+
             .search-input {
                 padding: 1rem 1rem 1rem 2.5rem;
                 font-size: 1rem;
             }
-            
+
             .search-filters {
                 gap: 0.5rem;
             }
-            
+
             .filter-btn {
                 padding: 0.75rem 1rem;
                 font-size: 0.9rem;
@@ -663,7 +678,7 @@
 
 <body>
     <div id="navbar-placeholder"></div>
-    
+
     <main class="search-container" role="main">
         <div class="search-header">
             <h1>Discover Amazing Content</h1>
@@ -676,12 +691,12 @@
                     <label for="query">Find posts, users, and blogs</label>
                     <div class="search-input-container">
                         <i class="fas fa-search search-icon"></i>
-                        <input id="query" name="q" type="search" class="search-input" 
-                               placeholder="Search posts, users, profiles, blogs..."
-                               autocomplete="off" aria-describedby="searchHelp" />
+                        <input id="query" name="q" type="search" class="search-input"
+                            placeholder="Search posts, users, profiles, blogs..." autocomplete="off"
+                            aria-describedby="searchHelp" />
                     </div>
                 </div>
-                
+
                 <div class="search-actions">
                     <button id="searchBtn" class="search-btn" type="submit">
                         <i class="fas fa-search"></i>
@@ -692,7 +707,7 @@
                         Clear
                     </button>
                 </div>
-                
+
                 <div id="searchHelp" class="search-stats" aria-live="polite">
                     Enter a search term to find posts, users, and blogs
                 </div>
@@ -730,13 +745,7 @@
 
     <div id="footer-placeholder"></div>
 
-    <script type="module" src="./js/navbar.js"></script>
-    <script type="module" src="./js/footer.js"></script>
     <script type="module">
-        // Import Firebase modules and configuration
-        import { db } from './js/firebase/firebase-config.js';
-        import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
         // DOM elements
         const queryInput = document.getElementById('query');
         const resultsEl = document.getElementById('results');
@@ -759,69 +768,18 @@
         // Initialize Firebase and load data
         async function initializeFirebase() {
             try {
-                updateFirebaseStatus('<i class="fas fa-sync-alt fa-spin"></i> Connecting to Firebase...', 'loading');
-                
-                updateFirebaseStatus('<i class="fas fa-sync-alt fa-spin"></i> Loading data from Firestore...', 'loading');
-                
-                // Load posts and users from Firestore
-                const [postsSnapshot, usersSnapshot] = await Promise.all([
-                    getDocs(collection(db, 'posts')),
-                    getDocs(collection(db, 'users'))
-                ]);
-                
-                // Map posts data
-                postsIndex = postsSnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return {
-                        id: doc.id,
-                        type: 'post',
-                        title: data.title || '',
-                        url: data.url || data.slug || `#post-${doc.id}`,
-                        excerpt: data.excerpt || data.description || data.content?.substring(0, 200) || '',
-                        tags: Array.isArray(data.tags) ? data.tags : 
-                              (data.tags ? String(data.tags).split(',').map(s => s.trim()) : []),
-                        date: formatDate(data.date || data.published || data.createdAt || data.timestamp || ''),
-                        content: data.content || data.body || '',
-                        author: data.author || data.user || '',
-                        authorId: data.authorId || data.uid || ''
-                    };
-                });
+                updateFirebaseStatus('<i class="fas fa-sync-alt fa-spin"></i> Loading demo data...', 'loading');
 
-                // Map users data with followers/following
-                usersIndex = await Promise.all(
-                    usersSnapshot.docs.map(async (doc) => {
-                        const data = doc.data();
-                        const userId = doc.id;
-                        
-                        // Get followers count
-                        const followersSnapshot = await getDocs(collection(db, 'users', userId, 'followers'));
-                        const followersCount = followersSnapshot.size;
-                        
-                        // Get following count
-                        const followingSnapshot = await getDocs(collection(db, 'users', userId, 'following'));
-                        const followingCount = followingSnapshot.size;
-                        
-                        return {
-                            id: userId,
-                            type: 'user',
-                            name: data.name || '',
-                            username: data.username || '',
-                            email: data.email || '',
-                            bio: data.bio || '',
-                            createdAt: formatDate(data.createdAt || ''),
-                            updatedAt: formatDate(data.updatedAt || data.lastModified || ''),
-                            uid: data.uid || userId,
-                            followersCount: followersCount,
-                            followingCount: followingCount,
-                            profileImage: data.profileImage || data.avatar || ''
-                        };
-                    })
-                );
-                
+                // Simulate loading delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Load demo data (replace with actual Firebase code when available)
+                await loadDemoData();
+
                 firebaseInitialized = true;
-                updateFirebaseStatus(`<i class="fas fa-check-circle"></i> Successfully loaded ${postsIndex.length} posts and ${usersIndex.length} users from Firebase`, 'success');
+                updateFirebaseStatus(`<i class="fas fa-check-circle"></i> Successfully loaded ${postsIndex.length} posts and ${usersIndex.length} users`, 'success');
                 updateUIState('ready');
-                
+
                 // If there's a query in URL, perform search
                 const params = new URLSearchParams(location.search);
                 const q = params.get('q') || '';
@@ -829,88 +787,186 @@
                     queryInput.value = q;
                     doSearch(q);
                 }
-                
+
             } catch (error) {
-                console.error('Firebase initialization error:', error);
-                updateFirebaseStatus(`<i class="fas fa-exclamation-circle"></i> Error loading data from Firebase: ${error.message}`, 'error');
-                updateUIState('error', 'Failed to load data from Firebase. Please check console for details.');
+                console.error('Initialization error:', error);
+                updateFirebaseStatus(`<i class="fas fa-exclamation-circle"></i> Error loading data: ${error.message}`, 'error');
+                updateUIState('error', 'Failed to load data. Please check console for details.');
             }
+        }
+
+        // Load demo data for testing
+        function loadDemoData() {
+            // Demo posts data
+            postsIndex = [
+                {
+                    id: 'post1',
+                    type: 'post',
+                    title: 'Getting Started with Modern JavaScript',
+                    url: '#post1',
+                    excerpt: 'Learn the fundamentals of modern JavaScript and how to use ES6+ features in your projects.',
+                    tags: ['JavaScript', 'Web Development', 'Programming'],
+                    date: '2023-10-15',
+                    content: 'Modern JavaScript has evolved significantly over the years. With the introduction of ES6 and subsequent versions, developers now have access to powerful features that make coding more efficient and readable.',
+                    author: 'Alex Johnson',
+                    authorId: 'user1'
+                },
+                {
+                    id: 'post2',
+                    type: 'post',
+                    title: 'The Complete Guide to CSS Grid',
+                    url: '#post2',
+                    excerpt: 'Master CSS Grid layout with this comprehensive guide covering all the essential concepts and techniques.',
+                    tags: ['CSS', 'Web Design', 'Layout'],
+                    date: '2023-09-22',
+                    content: 'CSS Grid Layout is a powerful tool for creating two-dimensional layouts on the web. It allows you to design complex responsive layouts with ease.',
+                    author: 'Sarah Williams',
+                    authorId: 'user2'
+                },
+                {
+                    id: 'post3',
+                    type: 'post',
+                    title: 'Building Scalable React Applications',
+                    url: '#post3',
+                    excerpt: 'Best practices and patterns for building large-scale React applications that are maintainable and performant.',
+                    tags: ['React', 'JavaScript', 'Frontend'],
+                    date: '2023-11-05',
+                    content: 'When building React applications at scale, it\'s important to follow established patterns and best practices to ensure your codebase remains maintainable.',
+                    author: 'Mike Chen',
+                    authorId: 'user3'
+                },
+                {
+                    id: 'post4',
+                    type: 'post',
+                    title: 'Introduction to Firebase Authentication',
+                    url: '#post4',
+                    excerpt: 'Learn how to implement secure authentication in your web applications using Firebase.',
+                    tags: ['Firebase', 'Authentication', 'Security'],
+                    date: '2023-08-30',
+                    content: 'Firebase Authentication provides backend services to authenticate users to your app. It supports authentication using passwords, phone numbers, and popular identity providers.',
+                    author: 'Alex Johnson',
+                    authorId: 'user1'
+                }
+            ];
+
+            // Demo users data with followers/following counts
+            usersIndex = [
+                {
+                    id: 'user1',
+                    type: 'user',
+                    name: 'Alex Johnson',
+                    username: 'alexj',
+                    email: 'alex@example.com',
+                    bio: 'Full-stack developer passionate about JavaScript and modern web technologies.',
+                    createdAt: '2022-03-15',
+                    updatedAt: '2023-10-20',
+                    uid: 'user1',
+                    followersCount: 42,
+                    followingCount: 28,
+                    profileImage: ''
+                },
+                {
+                    id: 'user2',
+                    type: 'user',
+                    name: 'Sarah Williams',
+                    username: 'sarahw',
+                    email: 'sarah@example.com',
+                    bio: 'UI/UX designer and frontend developer focused on creating beautiful user experiences.',
+                    createdAt: '2021-11-08',
+                    updatedAt: '2023-09-25',
+                    uid: 'user2',
+                    followersCount: 67,
+                    followingCount: 35,
+                    profileImage: ''
+                },
+                {
+                    id: 'user3',
+                    type: 'user',
+                    name: 'Mike Chen',
+                    username: 'mikec',
+                    email: 'mike@example.com',
+                    bio: 'Senior software engineer specializing in React and Node.js applications.',
+                    createdAt: '2020-07-22',
+                    updatedAt: '2023-11-10',
+                    uid: 'user3',
+                    followersCount: 89,
+                    followingCount: 42,
+                    profileImage: ''
+                },
+                {
+                    id: 'user4',
+                    type: 'user',
+                    name: 'Emma Davis',
+                    username: 'emmad',
+                    email: 'emma@example.com',
+                    bio: 'Technical writer and documentation specialist with a focus on developer tools.',
+                    createdAt: '2023-01-12',
+                    updatedAt: '2023-10-15',
+                    uid: 'user4',
+                    followersCount: 23,
+                    followingCount: 18,
+                    profileImage: ''
+                }
+            ];
         }
 
         // Format date from various possible formats
         function formatDate(dateValue) {
             if (!dateValue) return '';
-            
+
             try {
                 // If it's a Firestore timestamp
                 if (dateValue.toDate) {
                     return dateValue.toDate().toLocaleDateString();
                 }
-                
+
                 // If it's a string or number
                 const date = new Date(dateValue);
                 if (!isNaN(date.getTime())) {
                     return date.toLocaleDateString();
                 }
-                
+
                 return String(dateValue);
             } catch (e) {
                 return String(dateValue);
             }
         }
 
-        // Show user profile in modal with followers/following
-        async function showUserProfile(user) {
-            try {
-                // Get fresh followers and following data
-                const followersSnapshot = await getDocs(collection(db, 'users', user.id, 'followers'));
-                const followingSnapshot = await getDocs(collection(db, 'users', user.id, 'following'));
-                
-                const followersCount = followersSnapshot.size;
-                const followingCount = followingSnapshot.size;
-                
-                profileModalContent.innerHTML = `
-                    <div class="user-card">
-                        <div class="user-avatar" style="${user.profileImage ? `background-image: url('${escapeHtml(user.profileImage)}'); background-size: cover;` : ''}">
-                            ${user.profileImage ? '' : (user.name ? user.name.charAt(0).toUpperCase() : 'U')}
-                        </div>
-                        <div class="user-info">
-                            <div class="user-name">${escapeHtml(user.name || 'Unknown User')}</div>
-                            <div class="user-username">@${escapeHtml(user.username || '')}</div>
-                            <div class="user-bio">${escapeHtml(user.bio || 'No bio available')}</div>
-                            
-                            <div class="user-stats">
-                                <div class="user-stat">
-                                    <div class="user-stat-value">${followersCount}</div>
-                                    <div class="user-stat-label">Followers</div>
-                                </div>
-                                <div class="user-stat">
-                                    <div class="user-stat-value">${followingCount}</div>
-                                    <div class="user-stat-label">Following</div>
-                                </div>
+        // Show user profile in modal
+        function showUserProfile(user) {
+            profileModalContent.innerHTML = `
+                <div class="user-card">
+                    <div class="user-avatar" style="${user.profileImage ? `background-image: url('${escapeHtml(user.profileImage)}'); background-size: cover;` : ''}">
+                        ${user.profileImage ? '' : (user.name ? user.name.charAt(0).toUpperCase() : 'U')}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">${escapeHtml(user.name || 'Unknown User')}</div>
+                        <div class="user-username">@${escapeHtml(user.username || '')}</div>
+                        <div class="user-bio">${escapeHtml(user.bio || 'No bio available')}</div>
+                        
+                        <div class="user-stats">
+                            <div class="user-stat">
+                                <div class="user-stat-value">${user.followersCount || 0}</div>
+                                <div class="user-stat-label">Followers</div>
                             </div>
-                            
-                            <div class="card-badges" style="margin-top: 1rem;">
-                                <span class="badge badge-primary">User Profile</span>
-                                <span>Joined: ${escapeHtml(user.createdAt || 'Unknown')}</span>
-                            </div>
-                            <div style="margin-top: 1rem;">
-                                <h4>Contact</h4>
-                                <p>Email: ${escapeHtml(user.email || 'Not provided')}</p>
+                            <div class="user-stat">
+                                <div class="user-stat-value">${user.followingCount || 0}</div>
+                                <div class="user-stat-label">Following</div>
                             </div>
                         </div>
+                        
+                        <div class="card-badges" style="margin-top: 1rem;">
+                            <span class="badge badge-primary">User Profile</span>
+                            <span>Joined: ${escapeHtml(user.createdAt || 'Unknown')}</span>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <h4>Contact</h4>
+                            <p>Email: ${escapeHtml(user.email || 'Not provided')}</p>
+                        </div>
                     </div>
-                `;
-                profileModal.classList.add('active');
-            } catch (error) {
-                console.error('Error loading user profile:', error);
-                profileModalContent.innerHTML = `
-                    <div class="error-notice">
-                        <i class="fas fa-exclamation-circle"></i> Error loading user profile. Please try again.
-                    </div>
-                `;
-                profileModal.classList.add('active');
-            }
+                </div>
+            `;
+            profileModal.classList.add('active');
         }
 
         // Show post details in modal
@@ -937,17 +993,17 @@
 
         // Update Firebase connection status
         function updateFirebaseStatus(message, type = 'info') {
-            const className = type === 'error' ? 'error-notice' : 
-                            type === 'success' ? 'success-notice' : 
-                            type === 'loading' ? 'info-notice' : 'info-notice';
-            
+            const className = type === 'error' ? 'error-notice' :
+                type === 'success' ? 'success-notice' :
+                    type === 'loading' ? 'info-notice' : 'info-notice';
+
             firebaseStatus.innerHTML = message;
             firebaseStatus.className = className;
         }
 
         // Update UI based on state
         function updateUIState(state, message = '') {
-            switch(state) {
+            switch (state) {
                 case 'loading':
                     searchBtn.disabled = true;
                     searchHelp.textContent = 'Loading search index...';
@@ -969,7 +1025,7 @@
         // Highlight search terms in text
         function highlight(text, terms) {
             if (!terms.length) return escapeHtml(text);
-            
+
             let highlighted = escapeHtml(text);
             terms.forEach(term => {
                 const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
@@ -981,8 +1037,8 @@
         // Escape HTML to prevent XSS
         function escapeHtml(s) {
             if (typeof s !== 'string') return '';
-            return s.replace(/[&<>"']/g, c => 
-                ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+            return s.replace(/[&<>"']/g, c =>
+                ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
             );
         }
 
@@ -995,10 +1051,10 @@
         function search(q) {
             q = (q || '').trim();
             if (!q) return { posts: [], users: [] };
-            
+
             const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
             const termSet = new Set(terms);
-            
+
             // Search posts
             const postResults = postsIndex
                 .map(item => {
@@ -1009,30 +1065,30 @@
                         Array.isArray(item.tags) ? item.tags.join(' ') : '',
                         item.author || ''
                     ].join(' ').toLowerCase();
-                    
+
                     let score = 0;
                     for (const term of termSet) {
                         if (item.title && item.title.toLowerCase().includes(term)) {
                             score += 5;
                         }
-                        
-                        if (Array.isArray(item.tags) && item.tags.some(tag => 
+
+                        if (Array.isArray(item.tags) && item.tags.some(tag =>
                             tag.toLowerCase().includes(term))) {
                             score += 3;
                         }
-                        
+
                         const contentMatches = (item.content || '').toLowerCase().split(term).length - 1;
                         score += contentMatches * 0.1;
-                        
+
                         const excerptMatches = (item.excerpt || '').toLowerCase().split(term).length - 1;
                         score += excerptMatches * 0.5;
-                        
+
                         if (item.author && item.author.toLowerCase().includes(term)) {
                             score += 2;
                         }
                     }
-                    
-                    return {item, score};
+
+                    return { item, score };
                 })
                 .filter(r => r.score > 0)
                 .sort((a, b) => b.score - a.score)
@@ -1047,32 +1103,32 @@
                         item.bio || '',
                         item.email || ''
                     ].join(' ').toLowerCase();
-                    
+
                     let score = 0;
                     for (const term of termSet) {
                         if (item.name && item.name.toLowerCase().includes(term)) {
                             score += 5;
                         }
-                        
+
                         if (item.username && item.username.toLowerCase().includes(term)) {
                             score += 4;
                         }
-                        
+
                         if (item.bio && item.bio.toLowerCase().includes(term)) {
                             score += 3;
                         }
-                        
+
                         if (item.email && item.email.toLowerCase().includes(term)) {
                             score += 1;
                         }
                     }
-                    
-                    return {item, score};
+
+                    return { item, score };
                 })
                 .filter(r => r.score > 0)
                 .sort((a, b) => b.score - a.score)
                 .map(r => r.item);
-            
+
             return { posts: postResults, users: userResults };
         }
 
@@ -1080,10 +1136,10 @@
         function render(results, q) {
             const terms = q ? q.toLowerCase().split(/\s+/).filter(Boolean) : [];
             const { posts, users } = results;
-            
+
             let totalResults = 0;
             let filteredResults = [];
-            
+
             // Filter results based on current filter
             if (currentFilter === 'all') {
                 filteredResults = [
@@ -1098,15 +1154,15 @@
                 filteredResults = users.map(item => ({ ...item, type: 'user' }));
                 totalResults = users.length;
             }
-            
+
             // Update search stats
             if (q) {
                 let filterText = '';
                 if (currentFilter === 'posts') filterText = ' in posts';
                 if (currentFilter === 'users') filterText = ' in users';
-                
-                searchHelp.textContent = totalResults === 0 ? 
-                    `No results found for "${q}"${filterText}` : 
+
+                searchHelp.textContent = totalResults === 0 ?
+                    `No results found for "${q}"${filterText}` :
                     `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for "${q}"${filterText}`;
             } else {
                 if (firebaseInitialized) {
@@ -1115,7 +1171,7 @@
                     searchHelp.textContent = 'Loading search data...';
                 }
             }
-            
+
             // Render results
             if (!q) {
                 resultsEl.innerHTML = `
@@ -1127,7 +1183,7 @@
                 `;
                 return;
             }
-            
+
             if (totalResults === 0) {
                 resultsEl.innerHTML = `
                     <div class="no-results">
@@ -1138,13 +1194,13 @@
                 `;
                 return;
             }
-            
+
             resultsEl.innerHTML = '';
-            
+
             for (const item of filteredResults) {
                 const card = document.createElement('div');
                 card.className = 'result-card';
-                
+
                 if (item.type === 'post') {
                     // Render post item
                     card.innerHTML = `
@@ -1222,7 +1278,7 @@
                         </div>
                     `;
                 }
-                
+
                 resultsEl.appendChild(card);
             }
 
@@ -1233,10 +1289,10 @@
                     const type = link.dataset.type;
                     const id = link.dataset.id;
                     const username = link.dataset.username;
-                    
+
                     if (type === 'user') {
-                        const user = usersIndex.find(u => u.username === username) || 
-                                   usersIndex.find(u => u.name === username);
+                        const user = usersIndex.find(u => u.username === username) ||
+                            usersIndex.find(u => u.name === username);
                         if (user) {
                             showUserProfile(user);
                         }
@@ -1262,9 +1318,9 @@
         // Perform search with debouncing
         const doSearch = debounce((q) => {
             if (q === lastQuery) return;
-            
+
             lastQuery = q;
-            
+
             // Show loading state
             if (q.trim()) {
                 resultsEl.innerHTML = `
@@ -1273,7 +1329,7 @@
                     </div>
                 `;
             }
-            
+
             setTimeout(() => {
                 const results = search(q);
                 render(results, q);
@@ -1283,7 +1339,7 @@
         // Event listeners
         queryInput.addEventListener('input', (e) => {
             const q = e.target.value;
-            
+
             const u = new URL(location);
             if (q) {
                 u.searchParams.set('q', q);
@@ -1291,7 +1347,7 @@
                 u.searchParams.delete('q');
             }
             history.replaceState({}, '', u);
-            
+
             doSearch(q);
         });
 
@@ -1315,7 +1371,7 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilter = btn.dataset.filter;
-                
+
                 if (lastQuery) {
                     const results = search(lastQuery);
                     render(results, lastQuery);
@@ -1344,6 +1400,8 @@
         // Initialize when page loads
         initializeFirebase();
     </script>
+    <script type="module" src="./js/navbar.js"></script>
+    <script type="module" src="./js/footer.js"></script>
 </body>
 
 </html>

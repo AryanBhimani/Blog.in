@@ -1,6 +1,6 @@
-// Import Firebase modules and configuration
+// Import Firebase modules from your existing configuration
 import { db } from './firebase/firebase-config.js';
-import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // DOM elements
 const queryInput = document.getElementById('query');
@@ -17,16 +17,16 @@ const profileModalClose = document.querySelector('.profile-modal-close');
 // Search state
 let postsIndex = [];
 let usersIndex = [];
-let lastQuery = '';  
+let lastQuery = '';
 let currentFilter = 'all';
 let firebaseInitialized = false;
 
 // Initialize Firebase and load data
 async function initializeFirebase() {
     try {
-        updateFirebaseStatus('Connecting to Firebase...', 'loading');
+        updateFirebaseStatus('<i class="fas fa-sync-alt fa-spin"></i> Connecting to Firebase...', 'loading');
         
-        updateFirebaseStatus('Loading data from Firestore...', 'loading');
+        updateFirebaseStatus('<i class="fas fa-sync-alt fa-spin"></i> Loading data from Firestore...', 'loading');
         
         // Load posts and users from Firestore
         const [postsSnapshot, usersSnapshot] = await Promise.all([
@@ -59,12 +59,26 @@ async function initializeFirebase() {
                 const userId = doc.id;
                 
                 // Get followers count
-                const followersSnapshot = await getDocs(collection(db, 'users', userId, 'followers'));
-                const followersCount = followersSnapshot.size;
+                let followersCount = 0;
+                try {
+                    const followersSnapshot = await getDocs(collection(db, 'users', userId, 'followers'));
+                    followersCount = followersSnapshot.size;
+                } catch (error) {
+                    console.warn(`Could not fetch followers for user ${userId}:`, error);
+                    // If followers subcollection doesn't exist, use a default value
+                    followersCount = data.followersCount || 0;
+                }
                 
                 // Get following count
-                const followingSnapshot = await getDocs(collection(db, 'users', userId, 'following'));
-                const followingCount = followingSnapshot.size;
+                let followingCount = 0;
+                try {
+                    const followingSnapshot = await getDocs(collection(db, 'users', userId, 'following'));
+                    followingCount = followingSnapshot.size;
+                } catch (error) {
+                    console.warn(`Could not fetch following for user ${userId}:`, error);
+                    // If following subcollection doesn't exist, use a default value
+                    followingCount = data.followingCount || 0;
+                }
                 
                 return {
                     id: userId,
@@ -84,7 +98,7 @@ async function initializeFirebase() {
         );
         
         firebaseInitialized = true;
-        updateFirebaseStatus(`✅ Successfully loaded ${postsIndex.length} posts and ${usersIndex.length} users from Firebase`, 'success');
+        updateFirebaseStatus(`<i class="fas fa-check-circle"></i> Successfully loaded ${postsIndex.length} posts and ${usersIndex.length} users from Firebase`, 'success');
         updateUIState('ready');
         
         // If there's a query in URL, perform search
@@ -97,7 +111,7 @@ async function initializeFirebase() {
         
     } catch (error) {
         console.error('Firebase initialization error:', error);
-        updateFirebaseStatus(`❌ Error loading data from Firebase: ${error.message}`, 'error');
+        updateFirebaseStatus(`<i class="fas fa-exclamation-circle"></i> Error loading data from Firebase: ${error.message}`, 'error');
         updateUIState('error', 'Failed to load data from Firebase. Please check console for details.');
     }
 }
@@ -128,15 +142,26 @@ function formatDate(dateValue) {
 async function showUserProfile(user) {
     try {
         // Get fresh followers and following data
-        const followersSnapshot = await getDocs(collection(db, 'users', user.id, 'followers'));
-        const followingSnapshot = await getDocs(collection(db, 'users', user.id, 'following'));
+        let followersCount = user.followersCount || 0;
+        let followingCount = user.followingCount || 0;
         
-        const followersCount = followersSnapshot.size;
-        const followingCount = followingSnapshot.size;
+        try {
+            const followersSnapshot = await getDocs(collection(db, 'users', user.id, 'followers'));
+            followersCount = followersSnapshot.size;
+        } catch (error) {
+            console.warn(`Could not fetch followers for user ${user.id}:`, error);
+        }
+        
+        try {
+            const followingSnapshot = await getDocs(collection(db, 'users', user.id, 'following'));
+            followingCount = followingSnapshot.size;
+        } catch (error) {
+            console.warn(`Could not fetch following for user ${user.id}:`, error);
+        }
         
         profileModalContent.innerHTML = `
-            <div class="user-item">
-                <div class="user-avatar" style="width: 80px; height: 80px; font-size: 32px; ${user.profileImage ? `background-image: url('${escapeHtml(user.profileImage)}'); background-size: cover;` : ''}">
+            <div class="user-card">
+                <div class="user-avatar" style="${user.profileImage ? `background-image: url('${escapeHtml(user.profileImage)}'); background-size: cover;` : ''}">
                     ${user.profileImage ? '' : (user.name ? user.name.charAt(0).toUpperCase() : 'U')}
                 </div>
                 <div class="user-info">
@@ -144,22 +169,22 @@ async function showUserProfile(user) {
                     <div class="user-username">@${escapeHtml(user.username || '')}</div>
                     <div class="user-bio">${escapeHtml(user.bio || 'No bio available')}</div>
                     
-                    <div class="user-stats" style="display: flex; gap: 20px; margin: 16px 0; padding: 16px; background: #f8f9fa; border-radius: 8px;">
-                        <div class="stat">
-                            <div class="stat-number">${followersCount}</div>
-                            <div class="stat-label">Followers</div>
+                    <div class="user-stats">
+                        <div class="user-stat">
+                            <div class="user-stat-value">${followersCount}</div>
+                            <div class="user-stat-label">Followers</div>
                         </div>
-                        <div class="stat">
-                            <div class="stat-number">${followingCount}</div>
-                            <div class="stat-label">Following</div>
+                        <div class="user-stat">
+                            <div class="user-stat-value">${followingCount}</div>
+                            <div class="user-stat-label">Following</div>
                         </div>
                     </div>
                     
-                    <div class="meta">
-                        <span class="user-badge">User Profile</span>
+                    <div class="card-badges" style="margin-top: 1rem;">
+                        <span class="badge badge-primary">User Profile</span>
                         <span>Joined: ${escapeHtml(user.createdAt || 'Unknown')}</span>
                     </div>
-                    <div style="margin-top: 16px;">
+                    <div style="margin-top: 1rem;">
                         <h4>Contact</h4>
                         <p>Email: ${escapeHtml(user.email || 'Not provided')}</p>
                     </div>
@@ -171,7 +196,7 @@ async function showUserProfile(user) {
         console.error('Error loading user profile:', error);
         profileModalContent.innerHTML = `
             <div class="error-notice">
-                Error loading user profile. Please try again.
+                <i class="fas fa-exclamation-circle"></i> Error loading user profile. Please try again.
             </div>
         `;
         profileModal.classList.add('active');
@@ -183,16 +208,16 @@ function showPostDetails(post) {
     profileModalContent.innerHTML = `
         <div>
             <h3>${escapeHtml(post.title || 'Untitled Post')}</h3>
-            <div class="meta" style="margin: 12px 0;">
-                <time>${escapeHtml(post.date || 'Unknown date')}</time>
-                ${post.author ? `<span>by ${escapeHtml(post.author)}</span>` : ''}
+            <div class="card-meta">
+                <time><i class="far fa-calendar"></i> ${escapeHtml(post.date || 'Unknown date')}</time>
+                ${post.author ? `<span><i class="fas fa-user"></i> by ${escapeHtml(post.author)}</span>` : ''}
             </div>
-            <div class="excerpt">
+            <div class="card-excerpt" style="margin-top: 1rem;">
                 ${escapeHtml(post.content || post.excerpt || 'No content available')}
             </div>
             ${Array.isArray(post.tags) && post.tags.length > 0 ? `
-                <div class="meta" style="margin-top: 16px;">
-                    ${post.tags.map(tag => `<span class="post-badge">${escapeHtml(tag)}</span>`).join('')}
+                <div class="card-badges" style="margin-top: 1rem;">
+                    ${post.tags.map(tag => `<span class="badge badge-secondary">${escapeHtml(tag)}</span>`).join('')}
                 </div>
             ` : ''}
         </div>
@@ -238,7 +263,7 @@ function highlight(text, terms) {
     let highlighted = escapeHtml(text);
     terms.forEach(term => {
         const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
-        highlighted = highlighted.replace(regex, '<mark>$1</mark>');
+        highlighted = highlighted.replace(regex, '<mark class="highlight">$1</mark>');
     });
     return highlighted;
 }
@@ -383,117 +408,113 @@ function render(results, q) {
     
     // Render results
     if (!q) {
-        resultsEl.innerHTML = '<div class="no-results">Enter a query to search posts and users.</div>';
+        resultsEl.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <h3>Ready to Search</h3>
+                <p>Enter a query above to discover posts and users</p>
+            </div>
+        `;
         return;
     }
     
     if (totalResults === 0) {
-        resultsEl.innerHTML = '<div class="no-results">No results found. Try different keywords.</div>';
+        resultsEl.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <h3>No Results Found</h3>
+                <p>Try different keywords or browse all content</p>
+            </div>
+        `;
         return;
     }
     
-    const frag = document.createDocumentFragment();
+    resultsEl.innerHTML = '';
     
     for (const item of filteredResults) {
-        const div = document.createElement('div');
-        div.className = 'item';
+        const card = document.createElement('div');
+        card.className = 'result-card';
         
         if (item.type === 'post') {
             // Render post item
-            const title = document.createElement('div');
-            title.className = 'title';
-            title.innerHTML = `<a href="${escapeHtml(item.url || '#')}" class="profile-link" data-type="post" data-id="${item.id}">${highlight(item.title || 'Untitled Post', terms)}</a>`;
-            
-            const meta = document.createElement('div');
-            meta.className = 'meta';
-            
-            const dateParts = [];
-            if (item.date) {
-                dateParts.push(`<time>${escapeHtml(item.date)}</time>`);
-            }
-            
-            if (item.author) {
-                dateParts.push(`by <span class="profile-link" data-type="user" data-username="${item.author}">${escapeHtml(item.author)}</span>`);
-            }
-            
-            const tags = Array.isArray(item.tags) && item.tags.length > 0 ? 
-                item.tags.map(t => `<span class="post-badge">${escapeHtml(t)}</span>`).join('') : '';
-            
-            meta.innerHTML = dateParts.join(' • ');
-            if (tags) {
-                const tagsDiv = document.createElement('div');
-                tagsDiv.innerHTML = tags;
-                tagsDiv.style.marginTop = '8px';
-                meta.appendChild(tagsDiv);
-            }
-            
-            const excerpt = document.createElement('div');
-            excerpt.className = 'excerpt';
-            excerpt.innerHTML = highlight(item.excerpt || '', terms);
-            
-            div.appendChild(title);
-            if (meta.innerHTML) div.appendChild(meta);
-            if (excerpt.innerHTML) div.appendChild(excerpt);
+            card.innerHTML = `
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <a href="${escapeHtml(item.url || '#')}" class="profile-link" data-type="post" data-id="${item.id}">
+                            ${highlight(item.title || 'Untitled Post', terms)}
+                        </a>
+                    </h3>
+                    <div class="card-meta">
+                        ${item.date ? `<time><i class="far fa-calendar"></i> ${escapeHtml(item.date)}</time>` : ''}
+                        ${item.author ? `<span><i class="fas fa-user"></i> ${escapeHtml(item.author)}</span>` : ''}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-excerpt">
+                        ${highlight(item.excerpt || '', terms)}
+                    </div>
+                </div>
+                ${Array.isArray(item.tags) && item.tags.length > 0 ? `
+                    <div class="card-footer">
+                        <div class="card-badges">
+                            ${item.tags.slice(0, 3).map(tag => `<span class="badge badge-secondary">${escapeHtml(tag)}</span>`).join('')}
+                            ${item.tags.length > 3 ? `<span class="badge">+${item.tags.length - 3} more</span>` : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+                            <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
         } else if (item.type === 'user') {
             // Render user item with followers/following
-            div.className = 'item user-item';
-            
-            const avatar = document.createElement('div');
-            avatar.className = 'user-avatar';
-            if (item.profileImage) {
-                avatar.style.backgroundImage = `url('${escapeHtml(item.profileImage)}')`;
-                avatar.style.backgroundSize = 'cover';
-                avatar.style.backgroundPosition = 'center';
-            } else {
-                avatar.textContent = item.name ? item.name.charAt(0).toUpperCase() : 'U';
-            }
-            
-            const userInfo = document.createElement('div');
-            userInfo.className = 'user-info';
-            
-            const name = document.createElement('div');
-            name.className = 'user-name';
-            name.innerHTML = `<span class="profile-link" data-type="user" data-username="${item.username}">${highlight(item.name || 'Unknown User', terms)}</span>`;
-            
-            const username = document.createElement('div');
-            username.className = 'user-username';
-            username.innerHTML = `@${highlight(item.username, terms)}`;
-            
-            const bio = document.createElement('div');
-            bio.className = 'user-bio';
-            bio.innerHTML = highlight(item.bio || '', terms);
-            
-            // Add followers/following stats
-            const stats = document.createElement('div');
-            stats.className = 'user-stats';
-            stats.innerHTML = `
-                <span class="stat">
-                    <strong>${item.followersCount || 0}</strong> Followers
-                </span>
-                <span class="stat">
-                    <strong>${item.followingCount || 0}</strong> Following
-                </span>
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="user-card">
+                        <div class="user-avatar" style="${item.profileImage ? `background-image: url('${escapeHtml(item.profileImage)}'); background-size: cover;` : ''}">
+                            ${item.profileImage ? '' : (item.name ? item.name.charAt(0).toUpperCase() : 'U')}
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">
+                                <span class="profile-link" data-type="user" data-username="${item.username}">
+                                    ${highlight(item.name || 'Unknown User', terms)}
+                                </span>
+                            </div>
+                            <div class="user-username">
+                                @${highlight(item.username, terms)}
+                            </div>
+                            <div class="user-bio">
+                                ${highlight(item.bio || '', terms)}
+                            </div>
+                            <div class="user-stats">
+                                <div class="user-stat">
+                                    <div class="user-stat-value">${item.followersCount || 0}</div>
+                                    <div class="user-stat-label">Followers</div>
+                                </div>
+                                <div class="user-stat">
+                                    <div class="user-stat-value">${item.followingCount || 0}</div>
+                                    <div class="user-stat-label">Following</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="card-badges">
+                        <span class="badge badge-primary">User</span>
+                        <span>Joined ${escapeHtml(item.createdAt || '')}</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" title="Message"><i class="far fa-envelope"></i></button>
+                        <button class="action-btn" title="Follow"><i class="fas fa-user-plus"></i></button>
+                    </div>
+                </div>
             `;
-            
-            const meta = document.createElement('div');
-            meta.className = 'meta';
-            meta.innerHTML = `<span class="user-badge">User</span>`;
-            
-            userInfo.appendChild(name);
-            userInfo.appendChild(username);
-            if (bio.innerHTML.trim()) userInfo.appendChild(bio);
-            userInfo.appendChild(stats);
-            userInfo.appendChild(meta);
-            
-            div.appendChild(avatar);
-            div.appendChild(userInfo);
         }
         
-        frag.appendChild(div);
+        resultsEl.appendChild(card);
     }
-    
-    resultsEl.innerHTML = '';
-    resultsEl.appendChild(frag);
 
     // Add click listeners to profile links
     document.querySelectorAll('.profile-link').forEach(link => {
@@ -533,8 +554,20 @@ const doSearch = debounce((q) => {
     if (q === lastQuery) return;
     
     lastQuery = q;
-    const results = search(q);
-    render(results, q);
+    
+    // Show loading state
+    if (q.trim()) {
+        resultsEl.innerHTML = `
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        `;
+    }
+    
+    setTimeout(() => {
+        const results = search(q);
+        render(results, q);
+    }, 300);
 }, 200);
 
 // Event listeners

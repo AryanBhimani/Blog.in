@@ -17,7 +17,7 @@ const profileModalClose = document.querySelector('.profile-modal-close');
 // Search state
 let postsIndex = [];
 let usersIndex = [];
-let lastQuery = '';
+let lastQuery = '';  
 let currentFilter = 'all';
 let firebaseInitialized = false;
 

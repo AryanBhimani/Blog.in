@@ -1,6 +1,52 @@
-/*
- * Revised feed.css to finalize button styling and colors.
- */
+/* Enhanced Search Box */
+.search-container {
+    max-width: 700px;
+    margin: 30px auto;
+    position: relative;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 50px;
+    padding: 5px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.search-box:focus-within {
+    border-color: #ff5722;
+    box-shadow: 0 4px 20px rgba(255, 87, 34, 0.2);
+    transform: translateY(-2px);
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 15px 20px;
+    font-size: 16px;
+    background: transparent;
+    border-radius: 50px;
+}
+
+.search-icon {
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 5px;
+}
 
 /* Example Feed Grid Styles */
 .feed-grid {
@@ -14,56 +60,55 @@
     border: 1px solid #ddd;
     border-radius: 12px;
     background: #fff;
-    transition: all 0.3s ease; 
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
 }
 
 /* Hover effect for the blog card */
 .post-card:hover {
-    transform: translateY(-3px); 
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08); 
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
     border-color: #ccc;
 }
 
-
 /* Post Content Styles */
-.post-card h3 { 
-    margin: 0 0 5px 0;
+.post-card h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.4rem;
 }
+
 .post-card p {
     margin-bottom: 5px;
+    color: #555;
+    line-height: 1.5;
 }
+
 .post-card small {
     display: block;
     margin-bottom: 15px;
     color: #888;
 }
 
-
 /* --- LAYOUT FIX: Footer Actions Container --- */
-
 .post-footer-actions {
     display: flex;
-    margin-top: auto; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding-top: 10px;
-    border-top: 1px solid #eee; 
+    margin-top: auto;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
 }
 
 /* --- Primary Action Button Style (Read More/Show Less) --- */
-
 .primary-action-button {
-    display: inline-block; 
-    width: auto; 
-    
-    /* 🚨 COLOR FIX: Orange background and white text */
-    background-color: #ff5722; 
-    color: white; 
-    
+    display: inline-block;
+    width: auto;
+    background-color: #ff5722;
+    color: white;
     border: none;
-    padding: 8px 16px; 
+    padding: 10px 18px;
     border-radius: 6px;
     font-size: 15px;
     font-weight: bold;
@@ -73,51 +118,127 @@
 }
 
 .primary-action-button:hover {
-    /* Slightly darker orange on hover */
-    background-color: #e64a19; 
+    background-color: #e64a19;
 }
 
-
 /* --- Comment Link Style (Button Look) --- */
-
 .post-card .comment-btn {
     display: inline-block;
-    
-    /* 🚨 COLOR FIX: Orange border and orange text */
-    color: #ff5722; 
-    background-color: #fff; 
-    border: 1px solid #ff5722; 
-    
-    padding: 7px 12px; 
-    border-radius: 6px; 
+    color: #ff5722;
+    background-color: #fff;
+    border: 1px solid #ff5722;
+    padding: 9px 16px;
+    border-radius: 6px;
     text-decoration: none;
-    font-size: 14px; 
+    font-size: 14px;
     font-weight: 500;
     transition: all 0.2s ease;
 }
 
 .post-card .comment-btn:hover {
-    /* 🚨 COLOR FIX: Solid orange background and white text on hover */
-    background-color: #ff5722; 
-    color: white; 
+    background-color: #ff5722;
+    color: white;
     text-decoration: none;
 }
 
+/* No results message */
+.no-results {
+    text-align: center;
+    padding: 60px 40px;
+    color: #666;
+    font-size: 18px;
+}
 
-/* --- Responsive Fixes --- */
-@media (max-width: 600px) {
+.no-results-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Loading animation */
+.loading {
+    text-align: center;
+    padding: 50px 30px;
+    color: #666;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 87, 34, 0.3);
+    border-radius: 50%;
+    border-top-color: #ff5722;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Clear search button */
+.clear-search {
+    position: absolute;
+    right: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    display: none;
+}
+
+.clear-search:hover {
+    color: #ff5722;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 100%;
+    }
+
+    .search-box {
+        border-radius: 12px;
+    }
+
+    .search-input {
+        padding: 12px 15px;
+    }
+
+    .search-icon {
+        width: 45px;
+        height: 45px;
+    }
+
     .post-footer-actions {
         flex-direction: column;
-        align-items: stretch; 
+        align-items: stretch;
         gap: 10px;
     }
 
     .primary-action-button {
-        width: 100%; 
+        width: 100%;
     }
 
     .post-card .comment-btn {
         width: 100%;
         text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-options {
+        gap: 8px;
+    }
+
+    .search-filter {
+        padding: 6px 12px;
+        font-size: 13px;
     }
 }

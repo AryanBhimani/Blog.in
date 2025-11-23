@@ -9,7 +9,7 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f9f9f9;
-  color: #333;
+  color: #000000;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -35,7 +35,7 @@ body {
 /* Buttons (Global) */
 button {
   background: #ff5722;
-  color: #000000;
+  color: #ffffff;
   border: none;
   border-radius: 6px;
   padding: 0.7rem 1.2rem;
@@ -48,25 +48,6 @@ button:hover {
   background: #e64a19;
 }
 
-/* Inputs (Global) */
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: #ff5722;
-  box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
-}
 
 /* Links */
 a {

@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Search - Blog.in</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <style>
+        :root {
+            --primary-color: #2b6cb0;
+            --border-color: #ccc;
+            --text-color: #111;
+            --light-text: #666;
+            --bg-highlight: #ffea90;
+            --bg-item: #f9f9f9;
+        }
+        
+        body { 
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
+            padding: 24px; 
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .search { 
+            max-width: 700px; 
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+        }
+        
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+        
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #4a5568;
+        }
+        
+        .controls { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 16px;
+        }
+        
+        input[type="search"] { 
+            flex: 1; 
+            padding: 12px 16px; 
+            font-size: 16px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            transition: all 0.2s;
+        }
+        
+        input[type="search"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
+        }
+        
+        button { 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            border: 1px solid var(--primary-color); 
+            background: var(--primary-color); 
+            color: #fff; 
+            border-radius: 8px; 
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background: #1a4d80;
+            transform: translateY(-1px);
+        }
+        
+        #clearBtn {
+            background: #718096;
+            border-color: #718096;
+        }
+        
+        #clearBtn:hover {
+            background: #4a5568;
+        }
+        
+        .results { 
+            margin-top: 24px; 
+        }
+        
+        .item { 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 16px;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e0;
+        }
+        
+        .title { 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+            font-size: 1.25rem;
+        }
+        
+        .title a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.2s;
+        }
+        
+        .title a:hover {
+            color: #1a4d80;
+            text-decoration: underline;
+        }
+        
+        .excerpt { 
+            color: #4a5568; 
+            line-height: 1.6;
+        }
+        
+        mark { 
+            background: var(--bg-highlight); 
+            padding: 0 2px; 
+            border-radius: 2px;
+            font-weight: 600;
+        }
+        
+        .meta { 
+            font-size: 14px; 
+            color: var(--light-text); 
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .meta span {
+            display: inline-block;
+            background: #edf2f7;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .no-results { 
+            color: var(--light-text); 
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--light-text);
+            padding: 40px 20px;
+            font-size: 1.1rem;
+        }
+        
+        .search-stats {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 16px;
+            padding: 8px 0;
+        }
+        
+        .error-notice {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #c53030;
+        }
+        
+        .success-notice {
+            background: #c6f6d5;
+            border: 1px solid #9ae6b4;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #2d3748;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .item {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+    <main class="search" role="main">
+        <h1>Search Blog.in</h1>
+
+        <form id="searchForm" role="search" action="./search.html" method="get">
+            <label for="query">Find posts</label>
+            <div class="controls">
+                <input 
+                    id="query" 
+                    name="q" 
+                    type="search" 
+                    placeholder="Search posts, titles, tags..." 
+                    autocomplete="off" 
+                    aria-describedby="searchHelp"
+                />
+                <button id="searchBtn" type="submit">Search</button>
+                <button id="clearBtn" type="button" title="Clear">Clear</button>
+            </div>
+            <div id="searchHelp" class="search-stats" aria-live="polite">
+                Enter a search term to find posts
+            </div>
+        </form>
+
+        <div id="firebaseStatus"></div>
+
+        <div id="results" class="results" aria-live="polite"></div>
+    </main>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+        // DOM elements
+        const queryInput = document.getElementById('query');
+        const resultsEl = document.getElementById('results');
+        const clearBtn = document.getElementById('clearBtn');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchHelp = document.getElementById('searchHelp');
+        const firebaseStatus = document.getElementById('firebaseStatus');
+        const searchForm = document.getElementById('searchForm');
+
+        // Search state
+        let index = [];
+        let lastQuery = '';
+        let isLoading = false;
+        let firebaseInitialized = false;
+
+        // Initialize Firebase and load data
+        async function initializeFirebase() {
+            try {
+                updateFirebaseStatus('Connecting to Firebase...', 'loading');
+                
+                // Check if firebaseConfig is available
+                if (typeof firebaseConfig === 'undefined') {
+                    throw new Error('Firebase configuration not found. Please check firebase-config.js');
+                }
+
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+                
+                updateFirebaseStatus('Loading posts from Firestore...', 'loading');
+                
+                // Load all posts from Firestore
+                const querySnapshot = await getDocs(collection(db, 'posts'));
+                
+                // Map Firestore documents to search index format
+                index = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        title: data.title || '',
+                        url: data.url || `/posts/${doc.id}`,
+                        excerpt: data.excerpt || data.content?.substring(0, 200) || '',
+                        tags: Array.isArray(data.tags) ? data.tags : 
+                              (data.tags ? String(data.tags).split(',').map(s => s.trim()) : []),
+                        date: data.date || data.published || data.createdAt || '',
+                        // Include other fields that might be useful for search
+                        content: data.content || '',
+                        author: data.author || ''
+                    };
+                });
+                
+                firebaseInitialized = true;
+                updateFirebaseStatus(`Successfully loaded ${index.length} posts from Firebase`, 'success');
+                updateUIState('ready');
+                
+                // If there's a query in URL, perform search
+                const params = new URLSearchParams(location.search);
+                const q = params.get('q') || '';
+                if (q) {
+                    queryInput.value = q;
+                    doSearch(q);
+                }
+                
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                updateFirebaseStatus(`Error: ${error.message}`, 'error');
+                updateUIState('error', 'Failed to load posts. Please check console for details.');
+            }
+        }
+
+        // Update Firebase connection status
+        function updateFirebaseStatus(message, type = 'info') {
+            const className = type === 'error' ? 'error-notice' : 
+                            type === 'success' ? 'success-notice' : 'loading';
+            
+            firebaseStatus.innerHTML = `<div class="${className}">${message}</div>`;
+        }
+
+        // Update UI based on state
+        function updateUIState(state, message = '') {
+            switch(state) {
+                case 'loading':
+                    searchBtn.disabled = true;
+                    searchHelp.textContent = 'Loading search index...';
+                    break;
+                case 'ready':
+                    searchBtn.disabled = false;
+                    const query = queryInput.value.trim();
+                    if (!query) {
+                        searchHelp.textContent = `Ready to search ${index.length} posts`;
+                    }
+                    break;
+                case 'error':
+                    searchBtn.disabled = false;
+                    searchHelp.textContent = message;
+                    break;
+            }
+        }
+
+        // Highlight search terms in text
+        function highlight(text, terms) {
+            if (!terms.length) return escapeHtml(text);
+            
+            let highlighted = escapeHtml(text);
+            terms.forEach(term => {
+                const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+                highlighted = highlighted.replace(regex, '<mark>$1</mark>');
+            });
+            return highlighted;
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(s) {
+            if (typeof s !== 'string') return '';
+            return s.replace(/[&<>"']/g, c => 
+                ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+            );
+        }
+
+        // Escape regex special characters
+        function escapeRegExp(s) {
+            return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // Perform search on the Firebase index
+        function search(q) {
+            q = (q || '').trim();
+            if (!q) return [];
+            
+            const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+            const termSet = new Set(terms); // Remove duplicates
+            
+            return index
+                .map(item => {
+                    // Create searchable text from all relevant fields
+                    const searchText = [
+                        item.title || '',
+                        item.excerpt || '',
+                        item.content || '',
+                        Array.isArray(item.tags) ? item.tags.join(' ') : '',
+                        item.author || ''
+                    ].join(' ').toLowerCase();
+                    
+                    // Calculate score based on term matches with weights
+                    let score = 0;
+                    for (const term of termSet) {
+                        // Title matches are most important
+                        if (item.title && item.title.toLowerCase().includes(term)) {
+                            score += 5;
+                        }
+                        
+                        // Tag matches are important
+                        if (Array.isArray(item.tags) && item.tags.some(tag => 
+                            tag.toLowerCase().includes(term))) {
+                            score += 3;
+                        }
+                        
+                        // Content matches
+                        const contentMatches = (item.content || '').toLowerCase().split(term).length - 1;
+                        score += contentMatches * 0.1;
+                        
+                        // Excerpt matches
+                        const excerptMatches = (item.excerpt || '').toLowerCase().split(term).length - 1;
+                        score += excerptMatches * 0.5;
+                        
+                        // Author matches
+                        if (item.author && item.author.toLowerCase().includes(term)) {
+                            score += 2;
+                        }
+                    }
+                    
+                    return {item, score};
+                })
+                .filter(r => r.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .map(r => r.item);
+        }
+
+        // Render search results
+        function render(results, q) {
+            const terms = q ? q.toLowerCase().split(/\s+/).filter(Boolean) : [];
+            
+            // Update search stats
+            if (q) {
+                searchHelp.textContent = results.length === 0 ? 
+                    `No results found for "${q}"` : 
+                    `Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${q}"`;
+            } else {
+                searchHelp.textContent = firebaseInitialized ? 
+                    `Ready to search ${index.length} posts` : 
+                    'Loading posts...';
+            }
+            
+            // Render results
+            if (!q) {
+                resultsEl.innerHTML = '<div class="no-results">Enter a query to search posts.</div>';
+                return;
+            }
+            
+            if (results.length === 0) {
+                resultsEl.innerHTML = '<div class="no-results">No results found. Try different keywords or check if your Firebase data contains matching content.</div>';
+                return;
+            }
+            
+            const frag = document.createDocumentFragment();
+            
+            for (const r of results) {
+                const div = document.createElement('div');
+                div.className = 'item';
+                
+                // Title
+                const title = document.createElement('div');
+                title.className = 'title';
+                title.innerHTML = `<a href="${escapeHtml(r.url || '#')}">${highlight(r.title || 'Untitled Post', terms)}</a>`;
+                
+                // Metadata (date and tags)
+                const meta = document.createElement('div');
+                meta.className = 'meta';
+                
+                const dateParts = [];
+                if (r.date) {
+                    // Format date nicely
+                    const dateObj = r.date.toDate ? r.date.toDate() : new Date(r.date);
+                    dateParts.push(`<time>${dateObj.toLocaleDateString()}</time>`);
+                }
+                
+                if (r.author) {
+                    dateParts.push(`by ${escapeHtml(r.author)}`);
+                }
+                
+                const tags = Array.isArray(r.tags) && r.tags.length > 0 ? 
+                    r.tags.map(t => `<span>${escapeHtml(t)}</span>`).join('') : '';
+                
+                meta.innerHTML = dateParts.join(' • ');
+                if (tags) {
+                    const tagsDiv = document.createElement('div');
+                    tagsDiv.innerHTML = tags;
+                    tagsDiv.style.marginTop = '8px';
+                    meta.appendChild(tagsDiv);
+                }
+                
+                // Excerpt
+                const excerpt = document.createElement('div');
+                excerpt.className = 'excerpt';
+                excerpt.innerHTML = highlight(r.excerpt || '', terms);
+                
+                // Append elements
+                div.appendChild(title);
+                if (meta.innerHTML) div.appendChild(meta);
+                if (excerpt.innerHTML) div.appendChild(excerpt);
+                
+                frag.appendChild(div);
+            }
+            
+            resultsEl.innerHTML = '';
+            resultsEl.appendChild(frag);
+        }
+
+        // Debounce function to limit search frequency
+        function debounce(fn, wait = 300) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn(...args), wait);
+            };
+        }
+
+        // Perform search with debouncing
+        const doSearch = debounce((q) => {
+            if (q === lastQuery || !firebaseInitialized) return;
+            
+            lastQuery = q;
+            const results = search(q);
+            render(results, q);
+        }, 200);
+
+        // Event listeners
+        queryInput.addEventListener('input', (e) => {
+            const q = e.target.value;
+            
+            // Update URL without page reload
+            const u = new URL(location);
+            if (q) {
+                u.searchParams.set('q', q);
+            } else {
+                u.searchParams.delete('q');
+            }
+            history.replaceState({}, '', u);
+            
+            // Perform search
+            doSearch(q);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            queryInput.value = '';
+            queryInput.focus();
+            history.replaceState({}, '', location.pathname);
+            render([], '');
+            lastQuery = ''; // Reset last query
+        });
+
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const q = queryInput.value;
+            doSearch(q);
+        });
+
+        // Initialize Firebase when page loads
+        initializeFirebase();
+    </script>
+
+    <div id="footer-placeholder"></div>
+
+    <script type="module" src="./js/navbar.js"></script>
+    <script type="module" src="./js/footer.js"></script>
+    <script src="./js/firebase/firebase-config.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 // Import Firebase modules and configuration
 import { db } from './firebase/firebase-config.js';
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // DOM elements
 const queryInput = document.getElementById('query');
@@ -52,21 +52,36 @@ async function initializeFirebase() {
             };
         });
 
-        // Map users data
-        usersIndex = usersSnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,
-                type: 'user',
-                name: data.name || '',
-                username: data.username || '',
-                email: data.email || '',
-                bio: data.bio || '',
-                createdAt: formatDate(data.createdAt || ''),
-                updatedAt: formatDate(data.updatedAt || data.lastModified || ''),
-                uid: data.uid || doc.id
-            };
-        });
+        // Map users data with followers/following
+        usersIndex = await Promise.all(
+            usersSnapshot.docs.map(async (doc) => {
+                const data = doc.data();
+                const userId = doc.id;
+                
+                // Get followers count
+                const followersSnapshot = await getDocs(collection(db, 'users', userId, 'followers'));
+                const followersCount = followersSnapshot.size;
+                
+                // Get following count
+                const followingSnapshot = await getDocs(collection(db, 'users', userId, 'following'));
+                const followingCount = followingSnapshot.size;
+                
+                return {
+                    id: userId,
+                    type: 'user',
+                    name: data.name || '',
+                    username: data.username || '',
+                    email: data.email || '',
+                    bio: data.bio || '',
+                    createdAt: formatDate(data.createdAt || ''),
+                    updatedAt: formatDate(data.updatedAt || data.lastModified || ''),
+                    uid: data.uid || userId,
+                    followersCount: followersCount,
+                    followingCount: followingCount,
+                    profileImage: data.profileImage || data.avatar || ''
+                };
+            })
+        );
         
         firebaseInitialized = true;
         updateFirebaseStatus(`✅ Successfully loaded ${postsIndex.length} posts and ${usersIndex.length} users from Firebase`, 'success');
@@ -109,29 +124,58 @@ function formatDate(dateValue) {
     }
 }
 
-// Show user profile in modal
-function showUserProfile(user) {
-    profileModalContent.innerHTML = `
-        <div class="user-item">
-            <div class="user-avatar" style="width: 80px; height: 80px; font-size: 32px;">
-                ${user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-            </div>
-            <div class="user-info">
-                <div class="user-name">${escapeHtml(user.name || 'Unknown User')}</div>
-                <div class="user-username">@${escapeHtml(user.username || '')}</div>
-                <div class="user-bio">${escapeHtml(user.bio || 'No bio available')}</div>
-                <div class="meta">
-                    <span class="user-badge">User Profile</span>
-                    <span>Joined: ${escapeHtml(user.createdAt || 'Unknown')}</span>
+// Show user profile in modal with followers/following
+async function showUserProfile(user) {
+    try {
+        // Get fresh followers and following data
+        const followersSnapshot = await getDocs(collection(db, 'users', user.id, 'followers'));
+        const followingSnapshot = await getDocs(collection(db, 'users', user.id, 'following'));
+        
+        const followersCount = followersSnapshot.size;
+        const followingCount = followingSnapshot.size;
+        
+        profileModalContent.innerHTML = `
+            <div class="user-item">
+                <div class="user-avatar" style="width: 80px; height: 80px; font-size: 32px; ${user.profileImage ? `background-image: url('${escapeHtml(user.profileImage)}'); background-size: cover;` : ''}">
+                    ${user.profileImage ? '' : (user.name ? user.name.charAt(0).toUpperCase() : 'U')}
                 </div>
-                <div style="margin-top: 16px;">
-                    <h4>Contact</h4>
-                    <p>Email: ${escapeHtml(user.email || 'Not provided')}</p>
+                <div class="user-info">
+                    <div class="user-name">${escapeHtml(user.name || 'Unknown User')}</div>
+                    <div class="user-username">@${escapeHtml(user.username || '')}</div>
+                    <div class="user-bio">${escapeHtml(user.bio || 'No bio available')}</div>
+                    
+                    <div class="user-stats" style="display: flex; gap: 20px; margin: 16px 0; padding: 16px; background: #f8f9fa; border-radius: 8px;">
+                        <div class="stat">
+                            <div class="stat-number">${followersCount}</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">${followingCount}</div>
+                            <div class="stat-label">Following</div>
+                        </div>
+                    </div>
+                    
+                    <div class="meta">
+                        <span class="user-badge">User Profile</span>
+                        <span>Joined: ${escapeHtml(user.createdAt || 'Unknown')}</span>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <h4>Contact</h4>
+                        <p>Email: ${escapeHtml(user.email || 'Not provided')}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
-    profileModal.classList.add('active');
+        `;
+        profileModal.classList.add('active');
+    } catch (error) {
+        console.error('Error loading user profile:', error);
+        profileModalContent.innerHTML = `
+            <div class="error-notice">
+                Error loading user profile. Please try again.
+            </div>
+        `;
+        profileModal.classList.add('active');
+    }
 }
 
 // Show post details in modal
@@ -391,12 +435,18 @@ function render(results, q) {
             if (meta.innerHTML) div.appendChild(meta);
             if (excerpt.innerHTML) div.appendChild(excerpt);
         } else if (item.type === 'user') {
-            // Render user item
+            // Render user item with followers/following
             div.className = 'item user-item';
             
             const avatar = document.createElement('div');
             avatar.className = 'user-avatar';
-            avatar.textContent = item.name ? item.name.charAt(0).toUpperCase() : 'U';
+            if (item.profileImage) {
+                avatar.style.backgroundImage = `url('${escapeHtml(item.profileImage)}')`;
+                avatar.style.backgroundSize = 'cover';
+                avatar.style.backgroundPosition = 'center';
+            } else {
+                avatar.textContent = item.name ? item.name.charAt(0).toUpperCase() : 'U';
+            }
             
             const userInfo = document.createElement('div');
             userInfo.className = 'user-info';
@@ -413,13 +463,26 @@ function render(results, q) {
             bio.className = 'user-bio';
             bio.innerHTML = highlight(item.bio || '', terms);
             
+            // Add followers/following stats
+            const stats = document.createElement('div');
+            stats.className = 'user-stats';
+            stats.innerHTML = `
+                <span class="stat">
+                    <strong>${item.followersCount || 0}</strong> Followers
+                </span>
+                <span class="stat">
+                    <strong>${item.followingCount || 0}</strong> Following
+                </span>
+            `;
+            
             const meta = document.createElement('div');
             meta.className = 'meta';
             meta.innerHTML = `<span class="user-badge">User</span>`;
             
             userInfo.appendChild(name);
             userInfo.appendChild(username);
-            userInfo.appendChild(bio);
+            if (bio.innerHTML.trim()) userInfo.appendChild(bio);
+            userInfo.appendChild(stats);
             userInfo.appendChild(meta);
             
             div.appendChild(avatar);

@@ -8,36 +8,105 @@
     <link rel="stylesheet" href="./css/navbar.css">
     <link rel="stylesheet" href="./css/footer.css">
     <style>
-        :root {
-            --primary-color: #2b6cb0;
-            --border-color: #ccc;
-            --text-color: #111;
-            --light-text: #666;
-            --bg-highlight: #ffea90;
-            --bg-item: #f9f9f9;
+        /* Global Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
         }
-        
-        body { 
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
-            padding: 24px; 
-            color: var(--text-color);
-            line-height: 1.5;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+
+        /* Body */
+        body {
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+          background: #f9f9f9;
+          color: #333;
+          line-height: 1.6;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
+          padding: 0;
+          margin: 0;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
         }
-        
+
+        /* Container */
+        .container {
+          width: 90%;
+          max-width: 1100px;
+          margin: auto;
+          padding: 20px;
+        }
+
+        /* Page Title */
+        .page-title {
+          font-size: 2rem;
+          font-weight: bold;
+          margin: 20px 0;
+          color: #ff5722;
+          text-align: center;
+        }
+
+        /* Buttons (Global) */
+        button {
+          background: #ff5722;
+          color: #000000;
+          border: none;
+          border-radius: 6px;
+          padding: 0.7rem 1.2rem;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background 0.3s;
+        }
+
+        button:hover {
+          background: #e64a19;
+        }
+
+        /* Inputs (Global) */
+        input,
+        textarea,
+        select {
+          width: 100%;
+          padding: 0.8rem;
+          margin-bottom: 1rem;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          font-size: 1rem;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+          outline: none;
+          border-color: #ff5722;
+          box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
+        }
+
+        /* Links */
+        a {
+          color: #ff5722;
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        /* Search Page Specific Styles */
         .search { 
             max-width: 700px; 
             margin: 0 auto;
             flex: 1;
             width: 100%;
+            padding: 20px;
         }
         
-        h1 {
+        .search h1 {
             margin-bottom: 1.5rem;
-            color: #2d3748;
+            color: #ff5722;
+            text-align: center;
+            font-size: 2rem;
         }
         
         label { 
@@ -53,41 +122,42 @@
             margin-bottom: 16px;
         }
         
-        input[type="search"] { 
+        .controls input[type="search"] { 
             flex: 1; 
             padding: 12px 16px; 
             font-size: 16px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
             transition: all 0.2s;
+            margin-bottom: 0;
         }
         
-        input[type="search"]:focus {
+        .controls input[type="search"]:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
+            border-color: #ff5722;
+            box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.2);
         }
         
-        button { 
+        .search button { 
             padding: 12px 20px; 
             font-size: 16px; 
-            border: 1px solid var(--primary-color); 
-            background: var(--primary-color); 
-            color: #fff; 
-            border-radius: 8px; 
+            border: none;
+            background: #ff5722;
+            color: #000000;
+            border-radius: 6px; 
             cursor: pointer;
             transition: all 0.2s;
             font-weight: 600;
         }
         
-        button:hover {
-            background: #1a4d80;
+        .search button:hover {
+            background: #e64a19;
             transform: translateY(-1px);
         }
         
         #clearBtn {
             background: #718096;
-            border-color: #718096;
+            border: none;
         }
         
         #clearBtn:hover {
@@ -100,7 +170,7 @@
         
         .item { 
             padding: 20px; 
-            border-radius: 12px; 
+            border-radius: 8px; 
             border: 1px solid #e2e8f0; 
             margin-bottom: 16px;
             background: white;
@@ -122,12 +192,12 @@
         
         .title a {
             text-decoration: none;
-            color: var(--primary-color);
+            color: #ff5722;
             transition: color 0.2s;
         }
         
         .title a:hover {
-            color: #1a4d80;
+            color: #e64a19;
             text-decoration: underline;
         }
         
@@ -137,7 +207,7 @@
         }
         
         mark { 
-            background: var(--bg-highlight); 
+            background: #ffea90; 
             padding: 0 2px; 
             border-radius: 2px;
             font-weight: 600;
@@ -145,7 +215,7 @@
         
         .meta { 
             font-size: 14px; 
-            color: var(--light-text); 
+            color: #666; 
             margin-bottom: 8px;
             display: flex;
             flex-wrap: wrap;
@@ -163,7 +233,7 @@
         }
         
         .no-results { 
-            color: var(--light-text); 
+            color: #666; 
             padding: 40px 20px;
             text-align: center;
             font-size: 1.1rem;
@@ -171,14 +241,14 @@
         
         .loading {
             text-align: center;
-            color: var(--light-text);
+            color: #666;
             padding: 40px 20px;
             font-size: 1.1rem;
         }
         
         .search-stats {
             font-size: 14px;
-            color: var(--light-text);
+            color: #666;
             margin-bottom: 16px;
             padding: 8px 0;
         }
@@ -201,22 +271,137 @@
             color: #2d3748;
         }
         
-        @media (max-width: 600px) {
-            body {
-                padding: 16px;
-            }
-            
-            .controls {
-                flex-direction: column;
-            }
-            
-            button {
-                width: 100%;
-            }
-            
-            .item {
-                padding: 16px;
-            }
+        .info-notice {
+            background: #bee3f8;
+            border: 1px solid #90cdf4;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #2d3748;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px 20px;
+          background: #fff;
+          border-bottom: 1px solid #ddd;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+        }
+
+        .logo {
+          font-size: 20px;
+          font-weight: bold;
+          color: #ff5722;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          text-decoration: none;
+        }
+
+        .logo img {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #ff5722;
+        }
+
+        .nav-links {
+          list-style: none;
+          display: flex;
+          gap: 20px;
+        }
+
+        .nav-links li a {
+          text-decoration: none;
+          color: #333;
+          font-weight: 500;
+          transition: color 0.3s;
+        }
+
+        .nav-links li a:hover {
+          color: #ff5722;
+        }
+
+        /* Login Button Styles */
+        .login-button {
+          display: inline-block;
+          background-color: #ff5722;
+          color: #ffffff;
+          font-size: 16px;
+          font-weight: 500;
+          padding: 8px 16px;
+          border-radius: 5px;
+          text-decoration: none;
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .login-button:hover {
+          background-color: #e64a19;
+          transform: translateY(-2px);
+        }
+
+        .login-button:active {
+          background-color: #d84315;
+          transform: translateY(0);
+        }
+
+        /* Mobile menu */
+        .menu-toggle {
+          display: none;
+          font-size: 24px;
+          cursor: pointer;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+          .container {
+            width: 95%;
+            padding: 15px;
+          }
+
+          .page-title {
+            font-size: 1.6rem;
+          }
+
+          .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+          }
+
+          .nav-links.show {
+            display: flex;
+          }
+
+          .menu-toggle {
+            display: block;
+          }
+
+          .controls {
+            flex-direction: column;
+          }
+          
+          .search button {
+            width: 100%;
+          }
+          
+          .item {
+            padding: 16px;
+          }
         }
     </style>
 </head>
@@ -244,10 +429,29 @@
             </div>
         </form>
 
-        <div id="firebaseStatus"></div>
+        <div id="firebaseStatus" class="info-notice">
+            Loading search functionality...
+        </div>
 
         <div id="results" class="results" aria-live="polite"></div>
     </main>
+
+    <!-- Built-in Firebase Configuration -->
+    <script>
+        // Firebase Configuration - Replace these with your actual Firebase project settings
+        const firebaseConfig = {
+            // Replace these values with your actual Firebase config
+            apiKey: "AIzaSyExampleAppConfigKey123",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
+        
+        // Make it globally available
+        window.firebaseConfig = firebaseConfig;
+    </script>
 
     <script type="module">
         // Import Firebase modules
@@ -261,12 +465,10 @@
         const searchBtn = document.getElementById('searchBtn');
         const searchHelp = document.getElementById('searchHelp');
         const firebaseStatus = document.getElementById('firebaseStatus');
-        const searchForm = document.getElementById('searchForm');
 
         // Search state
         let index = [];
         let lastQuery = '';
-        let isLoading = false;
         let firebaseInitialized = false;
 
         // Initialize Firebase and load data
@@ -276,7 +478,17 @@
                 
                 // Check if firebaseConfig is available
                 if (typeof firebaseConfig === 'undefined') {
-                    throw new Error('Firebase configuration not found. Please check firebase-config.js');
+                    throw new Error('Firebase configuration not found.');
+                }
+
+                // Check if this is the example config
+                if (firebaseConfig.projectId === 'your-project-id') {
+                    updateFirebaseStatus(
+                        'Using example configuration. Please update with your Firebase project details.', 
+                        'error'
+                    );
+                    loadSampleData();
+                    return;
                 }
 
                 // Initialize Firebase
@@ -288,25 +500,30 @@
                 // Load all posts from Firestore
                 const querySnapshot = await getDocs(collection(db, 'posts'));
                 
+                if (querySnapshot.empty) {
+                    updateFirebaseStatus('No posts found in Firestore. Loading sample data.', 'error');
+                    loadSampleData();
+                    return;
+                }
+                
                 // Map Firestore documents to search index format
                 index = querySnapshot.docs.map(doc => {
                     const data = doc.data();
                     return {
                         id: doc.id,
                         title: data.title || '',
-                        url: data.url || `/posts/${doc.id}`,
-                        excerpt: data.excerpt || data.content?.substring(0, 200) || '',
+                        url: data.url || data.slug || `/posts/${doc.id}`,
+                        excerpt: data.excerpt || data.description || data.content?.substring(0, 200) || '',
                         tags: Array.isArray(data.tags) ? data.tags : 
                               (data.tags ? String(data.tags).split(',').map(s => s.trim()) : []),
-                        date: data.date || data.published || data.createdAt || '',
-                        // Include other fields that might be useful for search
-                        content: data.content || '',
-                        author: data.author || ''
+                        date: formatDate(data.date || data.published || data.createdAt || data.timestamp || ''),
+                        content: data.content || data.body || '',
+                        author: data.author || data.user || ''
                     };
                 });
                 
                 firebaseInitialized = true;
-                updateFirebaseStatus(`Successfully loaded ${index.length} posts from Firebase`, 'success');
+                updateFirebaseStatus(`✅ Loaded ${index.length} posts from Firebase`, 'success');
                 updateUIState('ready');
                 
                 // If there's a query in URL, perform search
@@ -319,17 +536,82 @@
                 
             } catch (error) {
                 console.error('Firebase initialization error:', error);
-                updateFirebaseStatus(`Error: ${error.message}`, 'error');
-                updateUIState('error', 'Failed to load posts. Please check console for details.');
+                updateFirebaseStatus(`❌ Error: ${error.message}. Loading sample data.`, 'error');
+                loadSampleData();
+            }
+        }
+
+        // Format date from various possible formats
+        function formatDate(dateValue) {
+            if (!dateValue) return '';
+            
+            try {
+                // If it's a Firestore timestamp
+                if (dateValue.toDate) {
+                    return dateValue.toDate().toLocaleDateString();
+                }
+                
+                // If it's a string or number
+                const date = new Date(dateValue);
+                if (!isNaN(date.getTime())) {
+                    return date.toLocaleDateString();
+                }
+                
+                return String(dateValue);
+            } catch (e) {
+                return String(dateValue);
+            }
+        }
+
+        // Load sample data when Firebase fails or not configured
+        function loadSampleData() {
+            updateFirebaseStatus('📝 Loading sample data for demonstration...', 'info');
+            
+            // Sample data for demonstration
+            index = [
+                {
+                    id: "1",
+                    title: "Getting Started with Aryan's Blog",
+                    url: "/posts/1",
+                    excerpt: "Welcome to my blog! I'm Aryan and this is where I share my thoughts on technology, programming, and life experiences.",
+                    tags: ["introduction", "getting-started", "aryan", "blog"],
+                    date: "March 15, 2024",
+                    content: "Welcome to my blog! I'm Aryan and this is where I share my thoughts...",
+                    author: "Aryan"
+                },
+                {
+                    id: "2", 
+                    title: "Aryan's Journey in Web Development",
+                    url: "/posts/2",
+                    excerpt: "Follow Aryan's journey from beginner to full-stack developer. Learn about the technologies I've mastered.",
+                    tags: ["web-development", "career", "javascript", "aryan"],
+                    date: "April 2, 2024",
+                    content: "Follow Aryan's journey from beginner to full-stack developer...",
+                    author: "Aryan"
+                }
+            ];
+            
+            firebaseInitialized = false;
+            updateFirebaseStatus(`📚 Loaded ${index.length} sample posts.`, 'info');
+            updateUIState('ready');
+            
+            // If there's a query in URL, perform search
+            const params = new URLSearchParams(location.search);
+            const q = params.get('q') || '';
+            if (q) {
+                queryInput.value = q;
+                doSearch(q);
             }
         }
 
         // Update Firebase connection status
         function updateFirebaseStatus(message, type = 'info') {
             const className = type === 'error' ? 'error-notice' : 
-                            type === 'success' ? 'success-notice' : 'loading';
+                            type === 'success' ? 'success-notice' : 
+                            type === 'loading' ? 'info-notice' : 'info-notice';
             
-            firebaseStatus.innerHTML = `<div class="${className}">${message}</div>`;
+            firebaseStatus.innerHTML = message;
+            firebaseStatus.className = className;
         }
 
         // Update UI based on state
@@ -378,17 +660,16 @@
             return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
-        // Perform search on the Firebase index
+        // Perform search on the index
         function search(q) {
             q = (q || '').trim();
             if (!q) return [];
             
             const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
-            const termSet = new Set(terms); // Remove duplicates
+            const termSet = new Set(terms);
             
             return index
                 .map(item => {
-                    // Create searchable text from all relevant fields
                     const searchText = [
                         item.title || '',
                         item.excerpt || '',
@@ -397,29 +678,23 @@
                         item.author || ''
                     ].join(' ').toLowerCase();
                     
-                    // Calculate score based on term matches with weights
                     let score = 0;
                     for (const term of termSet) {
-                        // Title matches are most important
                         if (item.title && item.title.toLowerCase().includes(term)) {
                             score += 5;
                         }
                         
-                        // Tag matches are important
                         if (Array.isArray(item.tags) && item.tags.some(tag => 
                             tag.toLowerCase().includes(term))) {
                             score += 3;
                         }
                         
-                        // Content matches
                         const contentMatches = (item.content || '').toLowerCase().split(term).length - 1;
                         score += contentMatches * 0.1;
                         
-                        // Excerpt matches
                         const excerptMatches = (item.excerpt || '').toLowerCase().split(term).length - 1;
                         score += excerptMatches * 0.5;
                         
-                        // Author matches
                         if (item.author && item.author.toLowerCase().includes(term)) {
                             score += 2;
                         }
@@ -436,25 +711,21 @@
         function render(results, q) {
             const terms = q ? q.toLowerCase().split(/\s+/).filter(Boolean) : [];
             
-            // Update search stats
             if (q) {
                 searchHelp.textContent = results.length === 0 ? 
                     `No results found for "${q}"` : 
                     `Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${q}"`;
             } else {
-                searchHelp.textContent = firebaseInitialized ? 
-                    `Ready to search ${index.length} posts` : 
-                    'Loading posts...';
+                searchHelp.textContent = `Ready to search ${index.length} posts`;
             }
             
-            // Render results
             if (!q) {
                 resultsEl.innerHTML = '<div class="no-results">Enter a query to search posts.</div>';
                 return;
             }
             
             if (results.length === 0) {
-                resultsEl.innerHTML = '<div class="no-results">No results found. Try different keywords or check if your Firebase data contains matching content.</div>';
+                resultsEl.innerHTML = '<div class="no-results">No results found. Try different keywords.</div>';
                 return;
             }
             
@@ -464,20 +735,16 @@
                 const div = document.createElement('div');
                 div.className = 'item';
                 
-                // Title
                 const title = document.createElement('div');
                 title.className = 'title';
                 title.innerHTML = `<a href="${escapeHtml(r.url || '#')}">${highlight(r.title || 'Untitled Post', terms)}</a>`;
                 
-                // Metadata (date and tags)
                 const meta = document.createElement('div');
                 meta.className = 'meta';
                 
                 const dateParts = [];
                 if (r.date) {
-                    // Format date nicely
-                    const dateObj = r.date.toDate ? r.date.toDate() : new Date(r.date);
-                    dateParts.push(`<time>${dateObj.toLocaleDateString()}</time>`);
+                    dateParts.push(`<time>${escapeHtml(r.date)}</time>`);
                 }
                 
                 if (r.author) {
@@ -495,12 +762,10 @@
                     meta.appendChild(tagsDiv);
                 }
                 
-                // Excerpt
                 const excerpt = document.createElement('div');
                 excerpt.className = 'excerpt';
                 excerpt.innerHTML = highlight(r.excerpt || '', terms);
                 
-                // Append elements
                 div.appendChild(title);
                 if (meta.innerHTML) div.appendChild(meta);
                 if (excerpt.innerHTML) div.appendChild(excerpt);
@@ -523,7 +788,7 @@
 
         // Perform search with debouncing
         const doSearch = debounce((q) => {
-            if (q === lastQuery || !firebaseInitialized) return;
+            if (q === lastQuery) return;
             
             lastQuery = q;
             const results = search(q);
@@ -534,7 +799,6 @@
         queryInput.addEventListener('input', (e) => {
             const q = e.target.value;
             
-            // Update URL without page reload
             const u = new URL(location);
             if (q) {
                 u.searchParams.set('q', q);
@@ -543,7 +807,6 @@
             }
             history.replaceState({}, '', u);
             
-            // Perform search
             doSearch(q);
         });
 
@@ -552,16 +815,16 @@
             queryInput.focus();
             history.replaceState({}, '', location.pathname);
             render([], '');
-            lastQuery = ''; // Reset last query
+            lastQuery = '';
         });
 
-        searchForm.addEventListener('submit', (e) => {
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const q = queryInput.value;
             doSearch(q);
         });
 
-        // Initialize Firebase when page loads
+        // Initialize when page loads
         initializeFirebase();
     </script>
 
@@ -569,6 +832,5 @@
 
     <script type="module" src="./js/navbar.js"></script>
     <script type="module" src="./js/footer.js"></script>
-    <script src="./js/firebase/firebase-config.js"></script>
 </body>
 </html>

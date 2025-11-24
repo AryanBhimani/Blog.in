@@ -70,3 +70,40 @@ a:hover {
     font-size: 1.6rem;
   }
 }
+
+/* Floating Action Button */
+.fab-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  font-size: 34px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.fab-btn:hover {
+  transform: scale(1.1);
+  background-color: #e64a19;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .fab-btn {
+    width: 50px;
+    height: 50px;
+    bottom: 16px;
+    right: 16px;
+    font-size: 30px;
+  }
+}

@@ -104,6 +104,27 @@
         document.getElementById("signup-pass").value
       );
     };
+
+    // -------- ENTER KEY TO SUBMIT (Login & Signup) --------
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        // If Login form is visible
+        if (!loginForm.classList.contains("hidden")) {
+          login(
+            document.getElementById("login-email").value,
+            document.getElementById("login-pass").value
+          );
+        }
+
+        // If Signup form is visible
+        if (!signupForm.classList.contains("hidden")) {
+          signup(
+            document.getElementById("signup-email").value,
+            document.getElementById("signup-pass").value
+          );
+        }
+      }
+    });
   </script>
 </body>
 

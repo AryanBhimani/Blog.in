@@ -14,71 +14,63 @@
 }
 
 .post-header-ui h2 {
-  font-size: 2.2rem;
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: bold;
   color: #ff5722;
-  margin-bottom: 0.3rem;
-}
-
-.post-header-ui .subtext {
-  color: #666;
-  font-size: 1rem;
-  margin-bottom: 2rem;
-}
-
-/* Form Groups */
-.input-group {
-  display: flex;
-  flex-direction: column;
   margin-bottom: 1.5rem;
 }
 
-.input-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.input-group input,
-.input-group textarea {
+/* Title Input */
+.title-input-ui {
+  width: 100%;
   padding: 1rem;
-  border: 1px solid #ddd;
+  margin: 1rem 0;
+  font-size: 1.1rem;
   border-radius: 12px;
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.2s;
+  border: 2px solid #dcdde1;
+  transition: all 0.2s ease;
 }
 
-.input-group input:focus,
-.input-group textarea:focus {
+.title-input-ui:focus {
   border-color: #ff5722;
-  box-shadow: 0 0 10px rgba(255, 87, 34, 0.2);
+  outline: none;
 }
 
-/* Textarea */
-textarea {
-  min-height: 180px;
-  resize: vertical;
+/* Content box */
+.content-input-ui {
+  width: 100%;
+  height: 180px;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: 2px solid #dcdde1;
+  resize: none;
+  transition: all 0.2s ease;
 }
 
-/* Button Group */
-.btn-group {
-  text-align: right;
+.content-input-ui:focus {
+  border-color: #ff5722;
+  outline: none;
 }
 
-.btn-group button {
-  padding: 0.75rem 2rem;
-  background: #ff5722;
-  border: none;
-  border-radius: 50px;
-  color: #fff;
-  font-size: 1rem;
+/* Submit button (ORANGE) */
+.submit-btn-ui {
+  width: 100%;
+  padding: 14px;
+  margin-top: 1.5rem;
+  background: #000000; /* Orange */
+  color: white;
+  font-size: 1.2rem;
   font-weight: 600;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
-.btn-group button:hover {
-  background: #e64a19;
+.submit-btn-ui:hover {
+  background: #ff5722; /* Darker Orange */
   transform: scale(1.05);
 }
 

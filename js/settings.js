@@ -1,56 +1,48 @@
 import { auth } from "./firebase/firebase-config.js";
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, deleteUser } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
+  updatePassword, reauthenticateWithCredential,
+  EmailAuthProvider, deleteUser
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-window.openScreen = function (id) {
-    document.getElementById("settings-main").style.display = "none";
-    document.getElementById(id).style.display = "block";
+window.openScreen = (id) => {
+  document.getElementById("settings-main").style.display = "none";
+  document.getElementById(id).style.display = "block";
 };
 
-window.goBack = function () {
-    document.querySelectorAll(".sub-screen").forEach(s => s.style.display = "none");
-    document.getElementById("settings-main").style.display = "block";
+window.goBack = () => {
+  document.querySelectorAll(".sub-screen").forEach(s => s.style.display = "none");
+  document.getElementById("settings-main").style.display = "block";
 };
 
-window.changePassword = async function () {
-    const user = auth.currentUser;
+window.changePassword = async () => {
+  const user = auth.currentUser;
+  if (!user) return window.location.href = "auth.html";
 
-    let current = document.getElementById("currentPass").value;
-    let newPass = document.getElementById("newPass").value;
-    let confirm = document.getElementById("confirmPass").value;
+  const cur = document.getElementById("currentPass").value;
+  const np = document.getElementById("newPass").value;
+  const cp = document.getElementById("confirmPass").value;
 
-    if (newPass !== confirm) {
-        alert("New passwords do not match!");
-        return;
-    }
+  if (np !== cp) return alert("Passwords do not match");
 
-    try {
-        const credential = EmailAuthProvider.credential(user.email, current);
-        await reauthenticateWithCredential(user, credential);
+  const cred = EmailAuthProvider.credential(user.email, cur);
+  await reauthenticateWithCredential(user, cred);
+  await updatePassword(user, np);
 
-        await updatePassword(user, newPass);
-
-        alert("Password updated successfully!");
-        goBack();
-
-    } catch (error) {
-        alert("Error: " + error.message);
-    }
+  alert("Password changed");
+  goBack();
 };
 
-window.deleteAccount = async function () {
-    const user = auth.currentUser;
+window.deleteAccount = async () => {
+  const user = auth.currentUser;
+  if (!user) return window.location.href = "auth.html";
 
-    let pass = document.getElementById("deletePass").value;
+  const pass = document.getElementById("deletePass").value;
+  if (!pass) return alert("Enter password");
 
-    try {
-        const credential = EmailAuthProvider.credential(user.email, pass);
-        await reauthenticateWithCredential(user, credential);
+  const cred = EmailAuthProvider.credential(user.email, pass);
+  await reauthenticateWithCredential(user, cred);
+  await deleteUser(user);
 
-        await deleteUser(user);
-
-        alert("Account deleted!");
-        window.location.href = "auth.html";
-    } catch (error) {
-        alert("Error: " + error.message);
-    }
+  alert("Account deleted");
+  window.location.href = "auth.html";
 };

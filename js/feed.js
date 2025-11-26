@@ -1,5 +1,6 @@
-// /js/feed.js
-import { db } from "./firebase/firebase-config.js";
+// feed.js (RESTORED DESIGN + FIXED LOGIC — NO CSS CHANGE)
+
+import { db, auth } from "./firebase/firebase-config.js";
 import {
   collection,
   getDocs,
@@ -11,183 +12,192 @@ import {
 const postsList = document.getElementById("all-posts-list");
 const searchInput = document.getElementById("search-input");
 const searchResultsInfo = document.getElementById("search-results-info");
+const clearSearchBtn = document.getElementById("clear-search");
+const searchBtn = document.getElementById("search-button");
 
-// Store all posts for search functionality
+// Store all posts (for search)
 let allPosts = [];
 
-// Initialize the application
+// Load everything when page loads
 document.addEventListener("DOMContentLoaded", () => {
   loadAllPosts();
   setupSearch();
 });
 
-// Load posts from Firebase
+/* ------------------------------------------
+   Load ALL posts from ALL users
+--------------------------------------------- */
 async function loadAllPosts() {
+  postsList.innerHTML = `
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading blogs...</p>
+    </div>
+  `;
+
   try {
-    // Get all users
-    const usersSnapshot = await getDocs(collection(db, "users"));
+    const usersSnap = await getDocs(collection(db, "users"));
     const posts = [];
 
-    // For each user, get their posts
-    for (const userDoc of usersSnapshot.docs) {
+    for (const userDoc of usersSnap.docs) {
       const userId = userDoc.id;
       const userData = userDoc.data();
-      const authorName = userData.username || "Anonymous";
+      const authorName = userData.username || "Unknown";
 
-      // Get posts for this user
       const postsRef = collection(db, "users", userId, "posts");
       const q = query(postsRef, orderBy("createdAt", "desc"));
-      const postsSnapshot = await getDocs(q);
+      const postsSnap = await getDocs(q);
 
-      // Process each post
-      postsSnapshot.forEach((postDoc) => {
+      postsSnap.forEach((postDoc) => {
         const postData = postDoc.data();
-        const postId = postDoc.id;
-
-        // Convert Firebase timestamp to Date
-        let postDate;
-        if (postData.createdAt && postData.createdAt.toDate) {
-          postDate = postData.createdAt.toDate();
-        } else {
-          postDate = new Date();
-        }
-
         posts.push({
-          id: postId,
-          userId: userId,
-          title: postData.title || "Untitled",
+          id: postDoc.id,
+          userId,
+          title: postData.title || "",
           content: postData.content || "",
+          createdAt: postData.createdAt?.toDate?.() || new Date(),
           author: authorName,
-          createdAt: postDate,
         });
       });
     }
 
-    // Sort all posts by date (newest first)
     posts.sort((a, b) => b.createdAt - a.createdAt);
 
-    // Store and render posts
     allPosts = posts;
     renderPosts(allPosts);
-  } catch (error) {
-    console.error("Error loading posts:", error);
-    postsList.innerHTML = `
-      <div class="no-results">
-        <p>Failed to load blogs.</p>
-        <p style="margin-top: 10px;">Please try again later.</p>
-      </div>
-    `;
+  } catch (err) {
+    console.error("Error loading posts:", err);
+    postsList.innerHTML = `<p>Failed to load blogs. Try again.</p>`;
   }
 }
 
-// Setup search functionality
+/* ------------------------------------------
+   SEARCH SETUP
+--------------------------------------------- */
 function setupSearch() {
-  let searchTimeout;
+  if (!searchInput) return;
 
-  searchInput.addEventListener("input", (e) => {
-    clearTimeout(searchTimeout);
+  let timeout;
 
-    searchTimeout = setTimeout(() => {
-      const searchTerm = e.target.value.trim().toLowerCase();
+  searchInput.addEventListener("input", () => {
+    clearTimeout(timeout);
 
-      if (searchTerm.length === 0) {
+    timeout = setTimeout(() => {
+      const term = searchInput.value.trim().toLowerCase();
+
+      if (!term) {
         renderPosts(allPosts);
+        searchResultsInfo.textContent = "";
         return;
       }
 
-      // Filter posts based on search term
-      const filteredPosts = allPosts.filter((post) => {
-        return (
-          post.title.toLowerCase().includes(searchTerm) ||
-          post.content.toLowerCase().includes(searchTerm) ||
-          post.author.toLowerCase().includes(searchTerm)
-        );
-      });
+      const filtered = allPosts.filter((p) =>
+        p.title.toLowerCase().includes(term) ||
+        p.content.toLowerCase().includes(term) ||
+        p.author.toLowerCase().includes(term)
+      );
 
-      renderPosts(filteredPosts, searchTerm);
-    }, 300); // 300ms debounce delay
+      renderPosts(filtered, term);
+      searchResultsInfo.textContent = `Showing ${filtered.length} results for "${term}"`;
+    }, 250);
   });
+
+  clearSearchBtn.onclick = () => {
+    searchInput.value = "";
+    searchResultsInfo.textContent = "";
+    renderPosts(allPosts);
+  };
+
+  searchBtn.onclick = () => {
+    const term = searchInput.value.trim().toLowerCase();
+    const filtered = allPosts.filter((p) =>
+      p.title.toLowerCase().includes(term) ||
+      p.content.toLowerCase().includes(term) ||
+      p.author.toLowerCase().includes(term)
+    );
+
+    renderPosts(filtered, term);
+    searchResultsInfo.textContent = `Showing ${filtered.length} results for "${term}"`;
+  };
 }
 
-// Render posts to the DOM
-function renderPosts(posts, searchTerm = "") {
-  if (posts.length === 0) {
-    postsList.innerHTML = `
-      <div class="no-results">
-        <p>No blogs found${searchTerm ? ` for "${searchTerm}"` : ""}.</p>
-        <p style="margin-top: 10px;">Try adjusting your search terms.</p>
-      </div>
-    `;
-    searchResultsInfo.textContent = "";
+/* ------------------------------------------
+   RENDER POSTS (KEEP ORIGINAL DESIGN)
+--------------------------------------------- */
+function renderPosts(posts, highlightTerm = "") {
+  if (!posts.length) {
+    postsList.innerHTML = `<p>No blogs found.</p>`;
     return;
   }
 
-  let postsHtml = "";
+  let html = "";
 
   posts.forEach((post) => {
-    // Highlight search terms in the content
-    let highlightedContent = post.content;
-    let highlightedTitle = post.title;
+    const excerpt = escapeHtml(post.content.substring(0, 150));
+    const fullContent = escapeHtml(post.content);
 
-    if (searchTerm) {
-      const regex = new RegExp(`(${searchTerm})`, "gi");
-      highlightedContent = post.content.replace(regex, "<mark>$1</mark>");
-      highlightedTitle = post.title.replace(regex, "<mark>$1</mark>");
-    }
+    const title = escapeHtml(post.title);
 
-    postsHtml += `
-      <article class="post-card" data-post-id="${post.id}" data-user-id="${post.userId}">
-        <h3>${highlightedTitle}</h3>
-        <p class="excerpt">${highlightedContent.substring(0, 150)}...</p>
-        
-        <div class="full-content" style="display:none;">
-          ${highlightedContent}
-        </div>
+    html += `
+      <article class="post-card" data-post-id="${post.id}">
+        <h3>${highlight(title, highlightTerm)}</h3>
 
-        <small>
-          By ${post.author} 
-          on ${post.createdAt.toLocaleDateString()}
-        </small>
+        <p class="excerpt">${highlight(excerpt, highlightTerm)}${post.content.length > 150 ? "..." : ""}</p>
 
-        <div class="post-footer-actions"> 
-          <button class="toggle-btn primary-action-button">Read More</button> 
-          <a href="comment.html?userId=${post.userId}&postId=${post.id}" class="comment-btn">
-            💬 Comment
-          </a>
+        <p class="full-content" style="display:none;">
+          ${highlight(fullContent, highlightTerm)}
+        </p>
+
+        <small>By ${escapeHtml(post.author)} on ${post.createdAt.toLocaleDateString()}</small>
+
+        <div class="post-footer-actions">
+          <button class="toggle-btn primary-action-button">Read More</button>
+          <a href="comment.html?userId=${post.userId}&postId=${post.id}" class="comment-btn">💬 Comment</a>
         </div>
       </article>
     `;
   });
 
-  postsList.innerHTML = postsHtml;
+  postsList.innerHTML = html;
 
-  // Update search results info
-  if (searchTerm) {
-    searchResultsInfo.textContent = `Found ${posts.length} result${
-      posts.length !== 1 ? "s" : ""
-    } for "${searchTerm}"`;
-  } else {
-    searchResultsInfo.textContent = `Showing all ${posts.length} blog${
-      posts.length !== 1 ? "s" : ""
-    }`;
-  }
-
-  // Attach expand/collapse functionality
+  /* ENABLE READ MORE / SHOW LESS */
   document.querySelectorAll(".toggle-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+    btn.onclick = (e) => {
       const card = e.target.closest(".post-card");
       const excerpt = card.querySelector(".excerpt");
-      const fullContent = card.querySelector(".full-content");
+      const full = card.querySelector(".full-content");
 
-      if (fullContent.style.display === "none") {
-        fullContent.style.display = "block";
+      if (full.style.display === "none") {
+        full.style.display = "block";
         excerpt.style.display = "none";
         btn.textContent = "Show Less";
       } else {
-        fullContent.style.display = "none";
+        full.style.display = "none";
         excerpt.style.display = "block";
         btn.textContent = "Read More";
       }
-    });
+    };
   });
+}
+
+/* ------------------------------------------
+   UTILITIES (KEEP ORIGINAL FORMAT)
+--------------------------------------------- */
+function escapeHtml(str) {
+  return str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function highlight(text, term) {
+  if (!term) return text;
+  const regex = new RegExp(`(${escapeRegExp(term)})`, "gi");
+  return text.replace(regex, "<mark>$1</mark>");
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

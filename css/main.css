@@ -107,3 +107,106 @@ a:hover {
     font-size: 30px;
   }
 }
+
+
+
+
+
+/*for follower and following list.*/
+.user-list {
+    margin-top: 20px;
+}
+
+.user-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    font-size: 17px;
+    border-bottom: 1px solid #cfcfcf; /* Divider */
+    cursor: pointer;
+}
+
+.user-list-item span {
+    font-weight: 500;
+}
+
+/* Follow/Unfollow Button */
+.follow-btn-small {
+    padding: 6px 14px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.follow-btn-small.follow {
+    background-color: #2196f3;
+    color: white;
+}
+
+.follow-btn-small.unfollow {
+    background-color: #e0e0e0;
+    color: black;
+}
+
+/* Remove (Following page) */
+.remove-btn {
+    padding: 6px 14px;
+    border-radius: 5px;
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+/* User List Container */
+.user-list {
+    margin-top: 20px;
+}
+
+/* Each User Item */
+.user-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #dcdcdc;  /* divider */
+    font-size: 17px;
+    cursor: pointer;
+}
+
+/* Username */
+.user-list-item span {
+    font-weight: 500;
+}
+
+/* Follow / Unfollow Buttons */
+.follow-btn-small {
+    padding: 6px 14px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.follow-btn-small.follow {
+    background-color: #1e88e5;
+    color: white;
+}
+
+.follow-btn-small.unfollow {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+/* Remove Button (Following Page Only) */
+.remove-btn {
+    padding: 6px 14px;
+    border-radius: 5px;
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}

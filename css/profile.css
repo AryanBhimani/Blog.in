@@ -276,3 +276,33 @@
 .subtle-action-button:hover {
   background-color: #e64a19;  /* darker orange on hover */
 }
+
+
+
+
+
+
+/* Settings button inside profile card */
+.settings-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ff7a00;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 20; /* IMPORTANT FIX: ensures clickable */
+    transition: 0.2s ease;
+}
+
+.settings-btn:hover {
+    background: #e86b00;
+    transform: scale(1.05);
+}
+
+.profile-header {
+    position: relative;
+}

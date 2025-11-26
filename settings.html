@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings</title>
+
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+    <link rel="stylesheet" href="./css/settings.css">
+</head>
+
+<body>
+
+<div id="navbar-placeholder"></div>
+
+<main class="settings-container">
+
+    <!-- MAIN SETTINGS LIST -->
+    <section id="settings-main">
+
+        <h2 class="settings-title">⚙️ Settings</h2>
+
+        <div class="settings-card" onclick="openScreen('password-screen')">
+            <h3>Change Password</h3>
+            <p>Update your account password securely</p>
+        </div>
+
+        <div class="settings-card" onclick="openScreen('delete-screen')">
+            <h3>Delete Account</h3>
+            <p>Permanently remove your account</p>
+        </div>
+
+        <div class="settings-card" onclick="openScreen('privacy-screen')">
+            <h3>Privacy Policy</h3>
+            <p>View our privacy policy</p>
+        </div>
+    </section>
+
+    <!-- CHANGE PASSWORD SCREEN -->
+    <section class="sub-screen" id="password-screen">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <h2>Change Password</h2>
+
+        <input type="password" id="currentPass" placeholder="Current Password">
+        <input type="password" id="newPass" placeholder="New Password">
+        <input type="password" id="confirmPass" placeholder="Confirm Password">
+
+        <button class="orange-btn" onclick="changePassword()">Update Password</button>
+    </section>
+
+    <!-- DELETE ACCOUNT SCREEN -->
+    <section class="sub-screen" id="delete-screen">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <h2>Delete Account</h2>
+
+        <p class="warning-text">⚠️ This action is permanent and cannot be undone.</p>
+
+        <input type="password" id="deletePass" placeholder="Enter Password To Confirm">
+
+        <button class="danger-btn" onclick="deleteAccount()">Delete My Account</button>
+    </section>
+
+    <!-- PRIVACY POLICY SCREEN -->
+    <section class="sub-screen" id="privacy-screen">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <h2>Privacy Policy</h2>
+
+        <p>Your privacy policy text goes here…</p>
+    </section>
+
+</main>
+
+<script type="module" src="./js/navbar.js"></script>
+<script type="module" src="./js/settings.js"></script>
+
+</body>
+</html>
